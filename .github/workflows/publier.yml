@@ -4,6 +4,12 @@ on:
     # Deux heures UTC couvrent 09:00 Europe/Paris été et hiver.
     - cron: "0 7,8 * * 1"
   workflow_dispatch:
+    inputs:
+      test_mode:
+        description: 'Test sans publication (recommandé)'
+        type: boolean
+        default: true
+        required: true
 permissions:
   contents: write
 concurrency:
@@ -47,9 +53,17 @@ jobs:
         if: steps.time.outputs.publish == 'true'
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          SIGNAL_TEST_MODE: ${{ github.event_name == 'workflow_dispatch' && inputs.test_mode && '1' || '0' }}
         run: python scripts/publish.py
+      - name: Conserver l'édition de test comme artifact
+        if: github.event_name == 'workflow_dispatch' && inputs.test_mode
+        uses: actions/upload-artifact@v4
+        with:
+          name: le-signal-test-preview
+          path: test-preview.html
+          if-no-files-found: warn
       - name: Commit et publication
-        if: steps.time.outputs.publish == 'true'
+        if: steps.time.outputs.publish == 'true' && !(github.event_name == 'workflow_dispatch' && inputs.test_mode)
         run: |
           if git diff --quiet && [ -z "$(git ls-files --others --exclude-standard)" ]; then
             echo "Aucune nouvelle édition à publier."
