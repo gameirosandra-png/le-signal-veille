@@ -1,4 +1,13 @@
 {
   "schemaVersion": 1,
-  "editions": []
+  "editions": [
+    {
+      "id": "2026-10-12",
+      "date": "2026-10-12",
+      "title": "Les agents IA gagnent en autonomie. Qui garde le contrôle ?",
+      "url": "/editions/2026-10-12.html",
+      "status": "edition-pilote",
+      "verifiedNews": false
+    }
+  ]
 }
