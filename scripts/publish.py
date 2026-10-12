@@ -39,7 +39,9 @@ def request_news(history):
         "Réponds UNIQUEMENT avec un objet JSON de forme "
         '{"articles":[{"id":"identifiant-stable","titre":"...","categorie":"IA|No-Code|Vibe Coding|Sécurité|Réglementation|Mise à jour importante",'
         '"date":"YYYY-MM-DD","source":"https://...","resume":"...","impact":"...","surveiller":"..."}]}. '
-        "Entre 0 et 8 sujets, jamais de remplissage. Les descriptions sont en français. "
+        "Vise 5 à 8 sujets indépendants, issus de sources primaires fiables, mais jamais de remplissage. "
+        "Si moins de 3 nouvelles solides sont disponibles, rends uniquement celles réellement vérifiables. "
+        "Les descriptions sont en français. "
         "Les articles sont utiles à une Product Builder travaillant sur PlayOff, Supabase, Airtable, Make, "
         "Claude Code, GitHub et Vercel. Pas de répétition d'un même événement."
     )
@@ -159,6 +161,9 @@ def main():
     articles = clean_articles(request_news(registry["items"]), registry["items"])
     if not articles:
         print("Aucune actualité nouvelle retenue ; aucune publication artificielle.")
+        return
+    if not test_mode and len(articles) < 3:
+        print("PUBLICATION BLOQUÉE : moins de 3 sujets retenus (" + str(len(articles)) + "). Revue éditoriale nécessaire.")
         return
     if test_mode:
         preview = ROOT / "test-preview.html"
