@@ -150,14 +150,20 @@ onscroll=()=>{const d=document.documentElement;document.querySelector("#progress
 
 
 def main():
+    test_mode = os.environ.get("SIGNAL_TEST_MODE") == "1"
     catalog = read_json("editions/index.json", {"schemaVersion": 1, "editions": []})
     registry = read_json("data/sujets.json", {"schemaVersion": 1, "items": []})
-    if any(x.get("date") == DATE for x in catalog["editions"]):
+    if not test_mode and any(x.get("date") == DATE for x in catalog["editions"]):
         print("Une édition existe déjà pour", DATE, "— aucune modification")
         return
     articles = clean_articles(request_news(registry["items"]), registry["items"])
     if not articles:
         print("Aucune actualité nouvelle retenue ; aucune publication artificielle.")
+        return
+    if test_mode:
+        preview = ROOT / "test-preview.html"
+        preview.write_text(render(articles), encoding="utf-8")
+        print("TEST OK — HTML généré :", preview.name, "| nouveaux sujets :", len(articles))
         return
     edition = ROOT / "editions" / (DATE + ".html")
     if edition.exists():
