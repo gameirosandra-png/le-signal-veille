@@ -119,7 +119,7 @@ def render(articles):
     return """<!doctype html><html lang="fr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>LE SIGNAL. — """ + esc(DATE) + """</title>
-<style>:root{--bg:#f7f3e9;--fg:#173c34;--copper:#b56d52;--paper:#fffdf8;--line:#d9d4c7}
+<style>nav{display:flex;gap:14px;flex-wrap:wrap}nav a{color:var(--fg);text-underline-offset:4px}header{flex-wrap:wrap}a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--copper);outline-offset:4px}:root{--bg:#f7f3e9;--fg:#173c34;--copper:#b56d52;--paper:#fffdf8;--line:#d9d4c7}
 body.dark{--bg:#16251e;--fg:#f5eee2;--paper:#23372d;--line:#456054}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.65 system-ui,sans-serif}
 header,main,footer{max-width:1080px;margin:auto;padding:26px}header{border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px}
