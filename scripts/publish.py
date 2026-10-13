@@ -111,7 +111,7 @@ def render(articles):
     esc = lambda s: html.escape(str(s), quote=True)
     feature, editorial = sections(DATE, articles, ROOT)
     panel, question = reading_sections(DATE, articles, ROOT)
-    archive = '<section class="archive-entry" aria-labelledby="archive-entry-title"><div><p class="tag">La mémoire du SIGNAL</p><h2 id="archive-entry-title">Une actualité à retrouver ?</h2><p>Explorez les sujets du journal, un par un, ou retrouvez une édition complète.</p><nav aria-label="Thèmes des archives"><a href="/archives.html?theme=IA">IA</a><a href="/archives.html?theme=No-Code">No-code</a><a href="/archives.html?theme=S%C3%A9curit%C3%A9">Sécurité</a></nav></div><a class="archive-entry-link" href="/archives.html">Explorer les archives →</a></section>'
+    archive = '<section class="archive-entry" aria-labelledby="archive-entry-title"><div><p class="tag">La mémoire du SIGNAL</p><h2 id="archive-entry-title">Une actualité à retrouver ?</h2><p>Explorez les sujets du journal, un par un, ou retrouvez une édition complète.</p><nav aria-label="Thèmes des archives"><a href="/archives.html?theme=IA">IA</a><a href="/archives.html?theme=No-Code">No-code</a><a href="/archives.html?theme=S%C3%A9curit%C3%A9">Sécurité</a><a href="/archives.html?theme=Vibe%20Coding">Vibe coding</a><a href="/archives.html?theme=R%C3%A9glementation">Réglementation</a><a href="/archives.html?theme=Actualit%C3%A9s">Actualités</a></nav></div><a class="archive-entry-link" href="/archives.html">Explorer les archives →</a></section>'
     cards = []
     for index, a in enumerate(articles):
         cards.append(
@@ -145,12 +145,12 @@ footer{border-top:1px solid var(--line);margin-top:45px}#progress{position:fixed
 <div><span>""" + esc(DATE) + """</span> <button id="dark">◐</button> <button onclick="print()">PDF ↗</button></div></header>
 <main><section class="hero"><div class="tag">Journal hebdomadaire · IA & No-Code</div><h1>LE SIGNAL.</h1><p class="publication-promise">Pour les personnes qui construisent avec l’IA et le no-code. Une sélection sourcée chaque semaine, validée avant publication. Abonnement gratuit.</p>
 <p>Ce qui a vraiment changé cette semaine, pourquoi cela compte et ce qu'il faut surveiller.</p></section>
-""" + panel + feature + archive + """<div class="controls"><input id="search" placeholder="Rechercher une actualité…" aria-label="Rechercher une actualité">
-<button id="all">Tous les sujets</button><button id="favorites">★ Favoris</button></div>
+""" + panel + feature + archive + """<div class="controls"><input id="search" placeholder="Rechercher dans toutes les actualités…" aria-label="Rechercher dans les actualités et les archives">
+<select id="all" aria-label="Filtrer toutes les actualités par thème"><option value="all">Tous les thèmes</option><option value="IA">IA</option><option value="No-Code">No-Code</option><option value="Vibe Coding">Vibe Coding</option><option value="Sécurité">Sécurité</option><option value="Réglementation">Réglementation</option><option value="Actualités">Actualités</option></select><button id="favorites">★ Favoris</button></div>
 <section class="grid" id="articles">""" + "\n".join(cards) + """</section>""" + editorial + """
 """ + question + """</main>
 <footer><img class="brand-signature" src="/assets/logo-signal.svg" alt="LE SIGNAL." width="388" height="280" loading="lazy">LE SIGNAL. · Sources externes à consulter pour confirmer les informations. © Édition """ + esc(DATE) + """ · <a href="/confidentialite.html">Confidentialité et données personnelles</a> · <a href="/a-propos.html">À propos</a> · <a href="/mentions-legales.html">Mentions légales</a></footer>
-<script src="/reading.js" defer></script></body></html>"""
+<script src="/news-index.js" defer></script><script src="/reading.js" defer></script></body></html>"""
     return page.replace("</head>", social_meta("LE SIGNAL. — " + DATE, "/editions/" + DATE + ".html", kind="article") + "</head>")
 
 

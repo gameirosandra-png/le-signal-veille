@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "items": [
+    {
+      "id": "pilote-2026-10-12-ia",
+      "categorie": "IA",
+      "titre": "Agents IA : autonomie et supervision",
+      "resume": "Surveiller les capacités d'action des agents, les mécanismes de validation humaine et la traçabilité des opérations.",
+      "source": "https://openai.com/news/",
+      "edition": "2026-10-12",
+      "kind": "repere"
+    },
+    {
+      "id": "pilote-2026-10-12-make",
+      "categorie": "No-Code",
+      "titre": "Make : automatisations observables",
+      "resume": "Vérifier les nouveautés concernant scénarios, erreurs, journaux et intégrations avant d'adapter les processus.",
+      "source": "https://www.make.com/en/blog",
+      "edition": "2026-10-12",
+      "kind": "repere"
+    },
+    {
+      "id": "pilote-2026-10-12-n8n",
+      "categorie": "No-Code",
+      "titre": "n8n : orchestration et contrôle",
+      "resume": "Suivre les changements de fonctionnalités et les possibilités d'hébergement pour des flux fiables.",
+      "source": "https://blog.n8n.io/",
+      "edition": "2026-10-12",
+      "kind": "repere"
+    },
+    {
+      "id": "pilote-2026-10-12-github",
+      "categorie": "Vibe Coding",
+      "titre": "GitHub : de l'assistance au code vérifiable",
+      "resume": "Observer les évolutions des outils de développement assisté, des tests et des protections des branches.",
+      "source": "https://github.blog/",
+      "edition": "2026-10-12",
+      "kind": "repere"
+    },
+    {
+      "id": "pilote-2026-10-12-tanstack",
+      "categorie": "Vibe Coding",
+      "titre": "TanStack : stabilité et sécurité applicative",
+      "resume": "Contrôler les notes de version et les avis de sécurité avant chaque mise à niveau.",
+      "source": "https://tanstack.com/",
+      "edition": "2026-10-12",
+      "kind": "repere"
+    },
+    {
+      "id": "pilote-2026-10-12-ai-act",
+      "categorie": "Réglementation",
+      "titre": "AI Act : obligations à suivre",
+      "resume": "Vérifier le calendrier et les textes applicables dans les sources officielles européennes.",
+      "source": "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai",
+      "edition": "2026-10-12",
+      "kind": "repere"
+    }
+  ]
+}
