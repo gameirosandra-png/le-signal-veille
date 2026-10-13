@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "articles": {
+    "make-event-subscriptions-2026-10-08": {"label":"Disponible · Teams/Enterprise","detail":"Fonction annoncée sur Teams et Enterprise ; elle ne fait pas partie de la formule gratuite.","themes":["No-Code"],"source":"https://help.make.com/introducing-event-subscriptions"},
+    "make-version-descriptions-2026-10-07": {"label":"Disponible · Toutes les formules","detail":"La source indique une disponibilité sur toutes les formules Make.","themes":["No-Code"],"source":"https://help.make.com/improved-scenario-toolbar-and-version-control"},
+    "openai-false-front-report-2026-10-08": {"label":"Rapport publié","detail":"Analyse publiée par OpenAI, présentée comme les observations de l’entreprise.","themes":["IA","Sécurité"],"source":"https://openai.com/index/disrupting-ai-enabled-false-front-operations/"},
+    "airtable-back-to-bases-2026-10-12": {"label":"Annoncé · À venir","detail":"Feuille de route : les nouveaux outils sont annoncés pour les prochaines semaines, sans disponibilité générale immédiate.","themes":["IA","No-Code"],"source":"https://community.airtable.com/announcements-6/an-update-on-airtable-s-team-and-what-we-re-building-next-48813"},
+    "vercel-cli-domain-purchase-2026-10-09": {"label":"Disponible · Accord humain requis","detail":"La préparation est automatisable ; l’achat reste soumis à votre accord explicite.","themes":["IA","Vibe Coding"],"source":"https://vercel.com/changelog/agents-can-now-buy-domains-with-the-vercel-cli"},
+    "vercel-pro-deployment-storage-2026-10-09": {"label":"Annoncé · Équipes Pro","detail":"Conservation à partir du 23 octobre ; la date de facturation propre à chaque équipe est communiquée par e-mail.","themes":["Vibe Coding"],"source":"https://vercel.com/changelog/deployment-storage-pricing-expands-to-existing-teams"}
+  }
+}

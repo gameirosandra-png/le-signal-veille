@@ -12,6 +12,7 @@ from zoneinfo import ZoneInfo
 from gazette_sections import sections
 from reading_sections import reading_sections
 from social_meta import social_meta
+from article_markers import marker
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 TODAY = dt.datetime.now(ZoneInfo("Europe/Paris")).date()
@@ -114,7 +115,7 @@ def render(articles):
     for index, a in enumerate(articles):
         cards.append(
             '<article class="card gazette-card" id="sujet-' + str(index) + '" data-article-id="' + esc(a['id']) + '" data-category="' + esc(a["categorie"]) + '"><div class="tag">' +
-            esc(a["categorie"]) + ' · ' + esc(a["date"]) + '</div><h2>' + esc(a["titre"]) +
+            esc(a["categorie"]) + ' · ' + esc(a["date"]) + '</div>' + marker(a, ROOT) + '<h2>' + esc(a["titre"]) +
             '</h2><p>' + esc(a["resume"]) + '</p><p><strong>Ce que cela change pour vous :</strong> ' +
             esc(a["impact"]) + '</p><details><summary>À surveiller</summary><p>' +
             esc(a["surveiller"]) + '</p></details><a target="_blank" rel="noopener noreferrer" href="' +

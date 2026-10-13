@@ -6,6 +6,7 @@ import html
 import json
 import pathlib
 import re
+import shutil
 import tempfile
 from zoneinfo import ZoneInfo
 
@@ -45,6 +46,8 @@ def prepare_page(review, root):
     with tempfile.TemporaryDirectory() as directory:
         temporary = pathlib.Path(directory)
         (temporary/'data').mkdir()
+        if (root/'data/reperes.json').exists():
+            shutil.copyfile(root/'data/reperes.json',temporary/'data/reperes.json')
         (temporary/'data/rubriques.json').write_text(json.dumps(rubriques,ensure_ascii=False),encoding='utf-8')
         old_root, old_date = publish.ROOT, publish.DATE
         try:

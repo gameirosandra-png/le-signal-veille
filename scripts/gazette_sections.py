@@ -3,6 +3,7 @@ import html
 import json
 import pathlib
 from urllib.parse import urlparse
+from article_markers import marker
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 
@@ -18,7 +19,7 @@ def sections(ident, articles, root=None):
         article = articles[index]
         why = signal.get('why') or article.get('impact', '')
         audience = signal.get('audience')
-        feature = '<section class="gazette-section signal-feature" aria-labelledby="signal-title"><p class="tag">Le signal de la semaine</p><h2 id="signal-title">' + esc(article['titre']) + '</h2><p class="feature-summary">' + esc(article['resume']) + '</p><div class="feature-meta"><div><strong>Pourquoi cela compte</strong><p>' + esc(why) + '</p></div>'
+        feature = '<section class="gazette-section signal-feature" aria-labelledby="signal-title"><p class="tag">Le signal de la semaine</p>' + marker(article, root) + '<h2 id="signal-title">' + esc(article['titre']) + '</h2><p class="feature-summary">' + esc(article['resume']) + '</p><div class="feature-meta"><div><strong>Pourquoi cela compte</strong><p>' + esc(why) + '</p></div>'
         if audience:
             feature += '<div><strong>Pour qui ?</strong><p>' + esc(audience) + '</p></div>'
         feature += '</div><a class="feature-link" href="#sujet-' + str(index) + '">Lire le décryptage et sa source →</a></section>'
