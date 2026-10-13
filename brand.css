@@ -1,1 +1,2 @@
 .logo img{display:block;width:106px;height:auto}.logo{flex-shrink:0}.brand-signature{display:block;width:84px;height:auto;margin-bottom:20px}.dark .logo img,.dark .brand-signature{background:#f7f3e9;border-radius:6px;padding:6px}@media(max-width:600px){header{gap:16px;flex-wrap:wrap}.logo img{width:82px}header nav{gap:10px}}@media print{.logo img{width:80px}}
+.publication-promise{max-width:800px;font-size:17px;line-height:1.65;color:var(--fg);border-left:2px solid var(--copper);padding-left:16px;margin:24px 0}
