@@ -18,7 +18,7 @@ module.exports=async(req,res)=>{
   const r=await n.db().query(`INSERT INTO newsletter_subscribers(id,email,consent_version,confirm_hash,confirm_expires) VALUES($1,$2,$3,$4,now()+interval '24 hours') ON CONFLICT(email) DO UPDATE SET confirm_hash=EXCLUDED.confirm_hash,confirm_expires=EXCLUDED.confirm_expires,requested_at=now(),consent_version=EXCLUDED.consent_version WHERE newsletter_subscribers.confirmed_at IS NULL AND newsletter_subscribers.requested_at < now()-interval '1 hour' RETURNING id`,[id,email,n.CONSENT,n.hash(raw)]);
   if(r.rowCount) {
    const url=c.SITE_URL+'/api/confirm?token='+raw;
-   await n.send({to:[email],subject:'Confirmez votre abonnement à LE SIGNAL.',html:n.emailHtml('Une dernière étape',[],url,c.SITE_URL+'/api/unsubscribe?token='+n.token(r.rows[0].id)).replace('Lire l’édition complète →','Confirmer mon abonnement →'),text:`Confirmez votre abonnement gratuit (lien valable 24 h) : ${url}\nSi vous n’avez rien demandé, ignorez ce message.`},'confirm/'+n.hash(raw));
+   await n.send({to:[email],subject:(c.NEWSLETTER_ENABLED==='true'?'':'TEST — ')+'Confirmez votre abonnement à LE SIGNAL.',html:n.emailHtml('Une dernière étape',[],url,c.SITE_URL+'/api/unsubscribe?token='+n.token(r.rows[0].id)).replace('Lire l’édition complète →','Confirmer mon abonnement →'),text:`Confirmez votre abonnement gratuit (lien valable 24 h) : ${url}\nSi vous n’avez rien demandé, ignorez ce message.`},'confirm/'+n.hash(raw));
   }
   return n.response(res,200,generic);
  }catch {return n.response(res,503,'L’abonnement est momentanément indisponible. Réessayez plus tard.');}
