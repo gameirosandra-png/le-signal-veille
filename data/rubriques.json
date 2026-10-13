@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "editions": {
+    "2026-10-13": {
+      "signal": {
+        "articleId": "make-event-subscriptions-2026-10-08",
+        "why": "Une automatisation ne se pilote pas seulement quand tout fonctionne. Recevoir un événement signé et comprendre une tentative échouée peut aider à réagir plus vite.",
+        "audience": "Les personnes qui maintiennent des scénarios Make en équipe. Disponibilité annoncée : Teams et Enterprise ; ce n’est pas une fonction de la formule gratuite."
+      },
+      "practice": {
+        "title": "Retrouver une version connue de votre scénario Make",
+        "duration": 15,
+        "requirements": "Un compte Make et un scénario d’essai utilisant uniquement des données fictives, sans envoi de message ni modification d’un service externe. Laissez sa planification désactivée.",
+        "steps": [
+          {"minutes": 3, "title": "Poser votre point de départ", "text": "Ouvrez le scénario d’essai. Avec « Save as version » / « Save a version », enregistrez une version décrite comme « Point de départ — exercice LE SIGNAL ». Repérez la valeur d’un paramètre fictif pour pouvoir la reconnaître ensuite."},
+          {"minutes": 4, "title": "Faire un changement lisible", "text": "Modifiez uniquement ce paramètre fictif, sans exécuter le scénario. Enregistrez une nouvelle version et décrivez précisément la modification : ancienne valeur, nouvelle valeur et raison du test."},
+          {"minutes": 5, "title": "Retrouver le bon état", "text": "Ouvrez « Version history ». Retrouvez le point de départ grâce à sa description, restaurez-le dans ce scénario d’essai, puis sauvegardez : Make ne sauvegarde pas automatiquement une version restaurée."},
+          {"minutes": 3, "title": "Vérifier votre résultat", "text": "Contrôlez que le paramètre fictif a retrouvé sa valeur initiale. Vous devez pouvoir expliquer ce qui a changé et quelle version vous avez restaurée. Gardez le scénario inactif."}
+        ],
+        "result": "Vous savez identifier une modification et retrouver une version connue, sans déclencher d’action externe.",
+        "limits": "Fonction annoncée sur toutes les formules. L’exercice ne nécessite pas d’exécution de scénario ; les quotas de votre compte restent applicables. Make indique conserver les versions 60 jours, sauf la plus récente. Les intitulés peuvent varier selon l’interface.",
+        "source": "https://help.make.com/scenario-version-control"
+      },
+      "sandra": {
+        "approved": true,
+        "text": "Ce que je retiens cette semaine : une automatisation utile doit aussi être compréhensible. Avant d’ajouter de l’autonomie, je préfère pouvoir expliquer ce qui se passe, repérer un échec et revenir à une version connue. Mon filtre : est-ce que cette nouveauté rend le projet plus simple à piloter ?"
+      }
+    }
+  }
+}

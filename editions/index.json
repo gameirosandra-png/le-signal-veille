@@ -10,8 +10,10 @@
       "verifiedNews": true,
       "articleCount": 3,
       "validatedAt": "2026-10-13T11:34:03.572425+00:00",
-      "validatedHtmlHash": "0c1a7442118b1f5200aeb451067038fabb5097a9c0dedb52060ada8f96168978",
-      "validatedContentHash": "2015f72a12fc766b9e97eaa629a01a94cbf84cbfc95e5e3492efc6f35869687d"
+      "validatedHtmlHash": "18789136d6dae4a88d7c99d8dc06d9b2a17a643c0ad59e0f8bfa144f27d144f2",
+      "validatedContentHash": "2015f72a12fc766b9e97eaa629a01a94cbf84cbfc95e5e3492efc6f35869687d",
+      "revisionValidatedAt": "2026-10-13T12:28:45.339252+00:00",
+      "revisionNote": "Ajout du sujet phare, de l’exercice proposé et du regard de Sandra approuvé par l’éditrice. Actualités et périmètre des destinataires inchangés."
     },
     {
       "id": "2026-10-12",
