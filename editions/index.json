@@ -2,6 +2,18 @@
   "schemaVersion": 1,
   "editions": [
     {
+      "id": "2026-10-13",
+      "date": "2026-10-13",
+      "title": "LE SIGNAL. — Automatiser mieux, vérifier davantage",
+      "url": "/editions/2026-10-13.html",
+      "status": "validee",
+      "verifiedNews": true,
+      "articleCount": 3,
+      "validatedAt": "2026-10-13T11:34:03.572425+00:00",
+      "validatedHtmlHash": "adcb3230611857f80621f8031ed069af41e79521e7c02752b793326404c17042",
+      "validatedContentHash": "2015f72a12fc766b9e97eaa629a01a94cbf84cbfc95e5e3492efc6f35869687d"
+    },
+    {
       "id": "2026-10-12",
       "date": "2026-10-12",
       "title": "Les agents IA gagnent en autonomie. Qui garde le contrôle ?",

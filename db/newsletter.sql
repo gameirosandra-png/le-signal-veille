@@ -12,3 +12,6 @@ CREATE TABLE IF NOT EXISTS newsletter_deliveries (
 CREATE TABLE IF NOT EXISTS newsletter_limits (
  key text PRIMARY KEY, hits integer NOT NULL, expires timestamptz NOT NULL
 );
+ALTER TABLE newsletter_subscribers ADD COLUMN IF NOT EXISTS suppressed_at timestamptz;
+ALTER TABLE newsletter_deliveries ADD COLUMN IF NOT EXISTS delivery_event text;
+ALTER TABLE newsletter_deliveries ADD COLUMN IF NOT EXISTS delivery_event_at timestamptz;

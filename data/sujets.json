@@ -1,4 +1,38 @@
 {
   "schemaVersion": 1,
-  "items": []
+  "items": [
+    {
+      "id": "make-event-subscriptions-2026-10-08",
+      "titre": "Make : être averti dès qu’un scénario rencontre un problème",
+      "categorie": "No-Code",
+      "date": "2026-10-08",
+      "source": "https://help.make.com/introducing-event-subscriptions",
+      "resume": "Make annonce des abonnements aux événements de sa plateforme : les notifications sont envoyées à une URL choisie, avec une signature et un journal des tentatives. La fonction est disponible sur Teams, avec trois abonnements par organisation, et sur Enterprise.",
+      "impact": "Notre lecture : ces notifications peuvent aider à repérer rapidement un échec de scénario. Vérifier leur signature avant de déclencher une action, puis prévoir une alerte compréhensible.",
+      "surveiller": "La disponibilité sur votre formule, les événements retenus et le traitement des notifications répétées.",
+      "edition": "2026-10-13"
+    },
+    {
+      "id": "make-version-descriptions-2026-10-07",
+      "titre": "Make : des versions décrites pour retrouver le bon scénario",
+      "categorie": "No-Code",
+      "date": "2026-10-07",
+      "source": "https://help.make.com/improved-scenario-toolbar-and-version-control",
+      "resume": "Make rapproche les commandes de test et de sauvegarde dans une nouvelle barre d’outils. Les versions peuvent recevoir une description, visible dans l’historique, pour identifier les changements et restaurer la version voulue. Ces nouveautés sont annoncées sur toutes les formules.",
+      "impact": "Notre lecture : nommer ce qui change avant une mise en production facilite les retours en arrière et le travail à plusieurs. Une description ne remplace pas un test avec des données adaptées.",
+      "surveiller": "La cohérence entre la version décrite, les connexions utilisées et le comportement réellement testé.",
+      "edition": "2026-10-13"
+    },
+    {
+      "id": "openai-false-front-report-2026-10-08",
+      "titre": "IA et information : OpenAI décrit deux opérations d’influence démantelées",
+      "categorie": "Sécurité",
+      "date": "2026-10-08",
+      "source": "https://openai.com/index/disrupting-ai-enabled-false-front-operations/",
+      "resume": "Dans un rapport du 8 octobre, OpenAI indique avoir interdit deux opérations d’influence liées à la Russie et à l’Iran. Selon l’entreprise, elles utilisaient ses modèles et de fausses identités pour soutenir des structures de façade et diffuser des contenus. Il s’agit des observations publiées par OpenAI.",
+      "impact": "Notre lecture : une apparence professionnelle ne suffit pas à établir la fiabilité d’une information. Pour une veille, remonter au document primaire, vérifier l’auteur et distinguer une déclaration d’un fait corroboré.",
+      "surveiller": "Les méthodes de vérification des sources et les éventuelles analyses indépendantes de ces opérations.",
+      "edition": "2026-10-13"
+    }
+  ]
 }

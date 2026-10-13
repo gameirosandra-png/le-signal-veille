@@ -1,1 +1,1 @@
-{"functions":{"api/dispatch.js":{"maxDuration":300,"includeFiles":"{editions/**,data/**}"}},"headers":[{"source":"/api/(.*)","headers":[{"key":"Cache-Control","value":"no-store"},{"key":"Referrer-Policy","value":"no-referrer"}]}]}
+{"regions":["fra1"],"functions":{"api/dispatch.js":{"maxDuration":300,"includeFiles":"{editions/**,data/**}"}},"headers":[{"source":"/api/(.*)","headers":[{"key":"Cache-Control","value":"no-store"},{"key":"Referrer-Policy","value":"no-referrer"}]}]}
