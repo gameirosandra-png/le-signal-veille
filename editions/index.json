@@ -4,7 +4,7 @@
     {
       "id": "2026-10-13",
       "date": "2026-10-13",
-      "title": "LE SIGNAL. â€” Automatiser mieux, vÃ©rifier davantage",
+      "title": "LE SIGNAL. — Automatiser mieux, vérifier davantage",
       "url": "/editions/2026-10-13.html",
       "status": "validee",
       "verifiedNews": true,
@@ -12,13 +12,13 @@
       "validatedAt": "2026-10-13T11:34:03.572425+00:00",
       "validatedHtmlHash": "ff6624c1fb18032fe7dcd5b0b60ea0f6f17dcb4b38e24034a53a13ddc961156d",
       "validatedContentHash": "2015f72a12fc766b9e97eaa629a01a94cbf84cbfc95e5e3492efc6f35869687d",
-      "revisionValidatedAt": "2026-10-13T13:57:47.376259+00:00",
-      "revisionNote": "Intégration du logo et du favicon approuvés. Contenu éditorial et destinataires inchangés."
+      "revisionValidatedAt": "2026-10-13T14:15:41.871Z",
+      "revisionNote": "Restauration des titres originaux après une erreur d’encodage. Empreinte éditoriale et date initiale de validation conservées."
     },
     {
       "id": "2026-10-12",
       "date": "2026-10-12",
-      "title": "Les agents IA gagnent en autonomie. Qui garde le contrÃ´le ?",
+      "title": "Les agents IA gagnent en autonomie. Qui garde le contrôle ?",
       "url": "/editions/2026-10-12.html",
       "status": "edition-pilote",
       "verifiedNews": false
