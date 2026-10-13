@@ -1,6 +1,7 @@
 const n=require('../lib/newsletter');
+const finish=require('../lib/subscription-page');
 module.exports=async(req,res)=>{
- if(!['GET','POST'].includes(req.method)) return n.response(res,405,'Méthode non autorisée.');
+ if(!['GET','POST'].includes(req.method)) return finish(req,res,405,'Méthode non autorisée.');
  try{
   n.storageConfig();const id=n.tokenId(req.query?.token);if(!id)return n.response(res,400,'Lien invalide.');
   await n.db().query('DELETE FROM newsletter_subscribers WHERE id=$1',[id]);
