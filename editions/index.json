@@ -10,10 +10,10 @@
       "verifiedNews": true,
       "articleCount": 3,
       "validatedAt": "2026-10-13T11:34:03.572425+00:00",
-      "validatedHtmlHash": "aa82b830e94f16d244d91506d9949326ec5e86717a070b25d9405d2ac3020a33",
+      "validatedHtmlHash": "ff6624c1fb18032fe7dcd5b0b60ea0f6f17dcb4b38e24034a53a13ddc961156d",
       "validatedContentHash": "2015f72a12fc766b9e97eaa629a01a94cbf84cbfc95e5e3492efc6f35869687d",
-      "revisionValidatedAt": "2026-10-13T13:31:12.927966+00:00",
-      "revisionNote": "Favoris en haut à droite des cartes et accès à l’abonnement dans le header. Contenu éditorial et destinataires inchangés."
+      "revisionValidatedAt": "2026-10-13T13:57:47.376259+00:00",
+      "revisionNote": "Intégration du logo et du favicon approuvés. Contenu éditorial et destinataires inchangés."
     },
     {
       "id": "2026-10-12",

@@ -120,7 +120,7 @@ def render(articles):
             esc(a["source"]) + '">Lire la source ↗</a></article>')
     if not cards:
         cards = ['<div class="card"><h2>Pas de nouveauté vérifiable cette semaine</h2><p>LE SIGNAL préfère ne rien inventer plutôt que recycler les annonces précédentes.</p></div>']
-    return """<!doctype html><html lang="fr"><head><meta charset="utf-8">
+    return """<!doctype html><html lang="fr"><head><link rel="icon" type="image/svg+xml" href="/assets/favicon-signal.svg"><link rel="stylesheet" href="/brand.css"><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="stylesheet" href="/gazette.css"><link rel="stylesheet" href="/reading.css">
 <title>LE SIGNAL. — """ + esc(DATE) + """</title>
@@ -138,7 +138,7 @@ button{cursor:pointer}input{flex:1;min-width:180px}.grid{display:grid;grid-templ
 .card a{color:var(--copper);font-weight:700}.card details{margin:15px 0}.card p{margin:12px 0}
 footer{border-top:1px solid var(--line);margin-top:45px}#progress{position:fixed;top:0;left:0;height:4px;background:var(--copper)}
 @media print{.controls,#progress{display:none!important}.card{break-inside:avoid}}
-</style></head><body data-edition='""" + esc(DATE) + """'><div id="progress"></div><header><a class="logo" style="color:inherit;text-decoration:none" href="/">LE SIGNAL.</a><nav aria-label="Navigation"><a href="/archives.html">Archives</a> · <a href="/a-propos.html">À propos</a> · <a href="/#newsletter-title">S’abonner</a></nav>
+</style></head><body data-edition='""" + esc(DATE) + """'><div id="progress"></div><header><a class="logo" style="color:inherit;text-decoration:none" href="/"><img src="/assets/logo-signal.svg" alt="LE SIGNAL." width="388" height="280"></a><nav aria-label="Navigation"><a href="/archives.html">Archives</a> · <a href="/a-propos.html">À propos</a> · <a href="/#newsletter-title">S’abonner</a></nav>
 <div><span>""" + esc(DATE) + """</span> <button id="dark">◐</button> <button onclick="print()">PDF ↗</button></div></header>
 <main><section class="hero"><div class="tag">Journal hebdomadaire · IA & No-Code</div><h1>LE SIGNAL.</h1>
 <p>Ce qui a vraiment changé cette semaine, pourquoi cela compte et ce qu'il faut surveiller.</p></section>
@@ -146,7 +146,7 @@ footer{border-top:1px solid var(--line);margin-top:45px}#progress{position:fixed
 <button id="all">Tous les sujets</button><button id="favorites">★ Favoris</button></div>
 <section class="grid" id="articles">""" + "\n".join(cards) + """</section>""" + editorial + """
 """ + question + """<p><a href="/archives.html">Parcourir les archives ↗</a></p></main>
-<footer>LE SIGNAL. · Sources externes à consulter pour confirmer les informations. © Édition """ + esc(DATE) + """ · <a href="/confidentialite.html">Confidentialité et données personnelles</a> · <a href="/a-propos.html">À propos</a> · <a href="/mentions-legales.html">Mentions légales</a></footer>
+<footer><img class="brand-signature" src="/assets/logo-signal.svg" alt="LE SIGNAL." width="388" height="280" loading="lazy">LE SIGNAL. · Sources externes à consulter pour confirmer les informations. © Édition """ + esc(DATE) + """ · <a href="/confidentialite.html">Confidentialité et données personnelles</a> · <a href="/a-propos.html">À propos</a> · <a href="/mentions-legales.html">Mentions légales</a></footer>
 <script src="/reading.js" defer></script></body></html>"""
 
 
