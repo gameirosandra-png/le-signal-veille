@@ -1,1 +1,56 @@
-{"regions":["fra1"],"functions":{"api/dispatch.js":{"maxDuration":300,"includeFiles":"{editions/**,data/**}"}},"headers":[{"source":"/api/(.*)","headers":[{"key":"Cache-Control","value":"no-store"},{"key":"Referrer-Policy","value":"no-referrer"}]}]}
+{
+  "regions": [
+    "fra1"
+  ],
+  "functions": {
+    "api/dispatch.js": {
+      "maxDuration": 300,
+      "includeFiles": "{editions/**,data/**}"
+    },
+    "api/admin-data.js": {
+      "includeFiles": "{editions/**,data/**}"
+    }
+  },
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "no-referrer"
+        }
+      ]
+    },
+    {
+      "source": "/admin.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "no-referrer"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/admin-auth/:path*",
+      "destination": "/api/admin-auth?authPath=:path*"
+    }
+  ]
+}
