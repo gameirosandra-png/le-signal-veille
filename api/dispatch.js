@@ -25,21 +25,21 @@ module.exports=async(req,res)=>{
   if(JSON.stringify(live)!==JSON.stringify(edition))throw Error('not live');
   const remote=await fetch(c.SITE_URL+edition.url,{cache:'no-store',signal:AbortSignal.timeout(10000)});
   if(!remote.ok||n.hash(await remote.text())!==n.hash(local))throw Error('not live');
-  const candidates=await n.db().query(`SELECT id FROM newsletter_subscribers s WHERE confirmed_at IS NOT NULL AND confirmed_at<=$1 AND NOT EXISTS(SELECT 1 FROM newsletter_deliveries d WHERE d.edition=$2 AND d.subscriber=s.id) LIMIT 8`,[edition.validatedAt,edition.id]);
+  const candidates=await n.db().query(`SELECT id FROM newsletter_subscribers s WHERE confirmed_at IS NOT NULL AND suppressed_at IS NULL AND confirmed_at<=$1 AND NOT EXISTS(SELECT 1 FROM newsletter_deliveries d WHERE d.edition=$2 AND d.subscriber=s.id) LIMIT 8`,[edition.validatedAt,edition.id]);
   let accepted=0, uncertain=0;
   for(const candidate of candidates.rows){
    const client=await n.db().connect();
    try{
     await client.query('BEGIN');
     // Lock subscriber against concurrent deletion until the request finishes.
-    const s=await client.query('SELECT * FROM newsletter_subscribers WHERE id=$1 AND confirmed_at IS NOT NULL FOR UPDATE',[candidate.id]);
+    const s=await client.query('SELECT * FROM newsletter_subscribers WHERE id=$1 AND confirmed_at IS NOT NULL AND suppressed_at IS NULL FOR UPDATE',[candidate.id]);
     if(!s.rowCount){await client.query('ROLLBACK');continue;}
     const claim=await client.query("INSERT INTO newsletter_deliveries(edition,subscriber,state) VALUES($1,$2,'sending') ON CONFLICT DO NOTHING RETURNING subscriber",[edition.id,candidate.id]);
     if(!claim.rowCount){await client.query('ROLLBACK');continue;}
     // Persist a claim before provider call: a crash cannot cause an automatic duplicate.
     await client.query('COMMIT');
     await client.query('BEGIN');
-    const still=await client.query('SELECT email FROM newsletter_subscribers WHERE id=$1 FOR UPDATE',[candidate.id]);
+    const still=await client.query('SELECT email FROM newsletter_subscribers WHERE id=$1 AND suppressed_at IS NULL FOR UPDATE',[candidate.id]);
     if(!still.rowCount){await client.query('ROLLBACK');continue;}
     const unsub=c.SITE_URL+'/api/unsubscribe?token='+n.token(candidate.id);
     try{

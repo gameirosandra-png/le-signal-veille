@@ -133,15 +133,15 @@ button{cursor:pointer}input{flex:1;min-width:180px}.grid{display:grid;grid-templ
 .card a{color:var(--copper);font-weight:700}.card details{margin:15px 0}.card p{margin:12px 0}
 footer{border-top:1px solid var(--line);margin-top:45px}#progress{position:fixed;top:0;left:0;height:4px;background:var(--copper)}
 @media print{.controls,#progress{display:none!important}.card{break-inside:avoid}}
-</style></head><body><div id="progress"></div><header><div class="logo">LE SIGNAL.</div>
+</style></head><body><div id="progress"></div><header><a class="logo" style="color:inherit;text-decoration:none" href="/">LE SIGNAL.</a><nav aria-label="Navigation"><a href="/archives.html">Archives</a> · <a href="/a-propos.html">À propos</a></nav>
 <div><span>""" + esc(DATE) + """</span> <button id="dark">◐</button> <button onclick="print()">PDF ↗</button></div></header>
 <main><section class="hero"><div class="tag">Journal hebdomadaire · IA & No-Code</div><h1>LE SIGNAL.</h1>
 <p>Ce qui a vraiment changé cette semaine, pourquoi cela compte et ce qu'il faut surveiller.</p></section>
 <div class="controls"><input id="search" placeholder="Rechercher dans l'édition…" aria-label="Rechercher">
 <button id="all">Tous les sujets</button><button id="favorites">★ Favoris</button></div>
 <section class="grid" id="articles">""" + "\n".join(cards) + """</section>
-<p><a href="/editions/index.json">Consulter le catalogue des archives ↗</a></p></main>
-<footer>LE SIGNAL. · Sources externes à consulter pour confirmer les informations. © Édition """ + esc(DATE) + """ · <a href="/confidentialite.html">Confidentialité et données personnelles</a></footer>
+<p><a href="/archives.html">Parcourir les archives ↗</a></p></main>
+<footer>LE SIGNAL. · Sources externes à consulter pour confirmer les informations. © Édition """ + esc(DATE) + """ · <a href="/confidentialite.html">Confidentialité et données personnelles</a> · <a href="/a-propos.html">À propos</a> · <a href="/mentions-legales.html">Mentions légales</a></footer>
 <script>const key="signal-favs";let favOnly=false;const fav=new Set(JSON.parse(localStorage.getItem(key)||"[]"));
 const cards=[...document.querySelectorAll(".card")];cards.forEach((c,i)=>{const b=document.createElement("button");b.textContent=fav.has(i)?"★":"☆";b.setAttribute("aria-label","Favori");b.onclick=()=>{fav.has(i)?fav.delete(i):fav.add(i);localStorage.setItem(key,JSON.stringify([...fav]));b.textContent=fav.has(i)?"★":"☆";show()};c.append(b)});
 function show(){const q=document.querySelector("#search").value.toLowerCase();cards.forEach((c,i)=>{c.hidden=(!c.textContent.toLowerCase().includes(q))||(favOnly&&!fav.has(i))})}
