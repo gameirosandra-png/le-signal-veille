@@ -138,7 +138,7 @@ button{cursor:pointer}input{flex:1;min-width:180px}.grid{display:grid;grid-templ
 .card a{color:var(--copper);font-weight:700}.card details{margin:15px 0}.card p{margin:12px 0}
 footer{border-top:1px solid var(--line);margin-top:45px}#progress{position:fixed;top:0;left:0;height:4px;background:var(--copper)}
 @media print{.controls,#progress{display:none!important}.card{break-inside:avoid}}
-</style></head><body data-edition='""" + esc(DATE) + """'><div id="progress"></div><header><a class="logo" style="color:inherit;text-decoration:none" href="/">LE SIGNAL.</a><nav aria-label="Navigation"><a href="/archives.html">Archives</a> · <a href="/a-propos.html">À propos</a></nav>
+</style></head><body data-edition='""" + esc(DATE) + """'><div id="progress"></div><header><a class="logo" style="color:inherit;text-decoration:none" href="/">LE SIGNAL.</a><nav aria-label="Navigation"><a href="/archives.html">Archives</a> · <a href="/a-propos.html">À propos</a> · <a href="/#newsletter-title">S’abonner</a></nav>
 <div><span>""" + esc(DATE) + """</span> <button id="dark">◐</button> <button onclick="print()">PDF ↗</button></div></header>
 <main><section class="hero"><div class="tag">Journal hebdomadaire · IA & No-Code</div><h1>LE SIGNAL.</h1>
 <p>Ce qui a vraiment changé cette semaine, pourquoi cela compte et ce qu'il faut surveiller.</p></section>
