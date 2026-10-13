@@ -141,7 +141,7 @@ footer{border-top:1px solid var(--line);margin-top:45px}#progress{position:fixed
 <button id="all">Tous les sujets</button><button id="favorites">★ Favoris</button></div>
 <section class="grid" id="articles">""" + "\n".join(cards) + """</section>
 <p><a href="/editions/index.json">Consulter le catalogue des archives ↗</a></p></main>
-<footer>LE SIGNAL. · Sources externes à consulter pour confirmer les informations. © Édition """ + esc(DATE) + """</footer>
+<footer>LE SIGNAL. · Sources externes à consulter pour confirmer les informations. © Édition """ + esc(DATE) + """ · <a href="/confidentialite.html">Confidentialité et données personnelles</a></footer>
 <script>const key="signal-favs";let favOnly=false;const fav=new Set(JSON.parse(localStorage.getItem(key)||"[]"));
 const cards=[...document.querySelectorAll(".card")];cards.forEach((c,i)=>{const b=document.createElement("button");b.textContent=fav.has(i)?"★":"☆";b.setAttribute("aria-label","Favori");b.onclick=()=>{fav.has(i)?fav.delete(i):fav.add(i);localStorage.setItem(key,JSON.stringify([...fav]));b.textContent=fav.has(i)?"★":"☆";show()};c.append(b)});
 function show(){const q=document.querySelector("#search").value.toLowerCase();cards.forEach((c,i)=>{c.hidden=(!c.textContent.toLowerCase().includes(q))||(favOnly&&!fav.has(i))})}
