@@ -9,6 +9,7 @@ import re
 import urllib.request
 from urllib.parse import urlparse
 from zoneinfo import ZoneInfo
+from gazette_sections import sections
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 TODAY = dt.datetime.now(ZoneInfo("Europe/Paris")).date()
@@ -105,12 +106,13 @@ def clean_articles(raw, prior):
 
 def render(articles):
     esc = lambda s: html.escape(str(s), quote=True)
+    feature, editorial = sections(DATE, articles, ROOT)
     cards = []
-    for a in articles:
+    for index, a in enumerate(articles):
         cards.append(
-            '<article class="card" data-category="' + esc(a["categorie"]) + '"><div class="tag">' +
+            '<article class="card gazette-card" id="sujet-' + str(index) + '" data-category="' + esc(a["categorie"]) + '"><div class="tag">' +
             esc(a["categorie"]) + ' · ' + esc(a["date"]) + '</div><h2>' + esc(a["titre"]) +
-            '</h2><p>' + esc(a["resume"]) + '</p><p><strong>Pour mes projets :</strong> ' +
+            '</h2><p>' + esc(a["resume"]) + '</p><p><strong>Ce que cela change pour vous :</strong> ' +
             esc(a["impact"]) + '</p><details><summary>À surveiller</summary><p>' +
             esc(a["surveiller"]) + '</p></details><a target="_blank" rel="noopener noreferrer" href="' +
             esc(a["source"]) + '">Lire la source ↗</a></article>')
@@ -118,6 +120,7 @@ def render(articles):
         cards = ['<div class="card"><h2>Pas de nouveauté vérifiable cette semaine</h2><p>LE SIGNAL préfère ne rien inventer plutôt que recycler les annonces précédentes.</p></div>']
     return """<!doctype html><html lang="fr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="/gazette.css">
 <title>LE SIGNAL. — """ + esc(DATE) + """</title>
 <style>nav{display:flex;gap:14px;flex-wrap:wrap}nav a{color:var(--fg);text-underline-offset:4px}header{flex-wrap:wrap}a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--copper);outline-offset:4px}:root{--bg:#f7f3e9;--fg:#173c34;--copper:#b56d52;--paper:#fffdf8;--line:#d9d4c7}
 body.dark{--bg:#16251e;--fg:#f5eee2;--paper:#23372d;--line:#456054}
@@ -137,13 +140,13 @@ footer{border-top:1px solid var(--line);margin-top:45px}#progress{position:fixed
 <div><span>""" + esc(DATE) + """</span> <button id="dark">◐</button> <button onclick="print()">PDF ↗</button></div></header>
 <main><section class="hero"><div class="tag">Journal hebdomadaire · IA & No-Code</div><h1>LE SIGNAL.</h1>
 <p>Ce qui a vraiment changé cette semaine, pourquoi cela compte et ce qu'il faut surveiller.</p></section>
-<div class="controls"><input id="search" placeholder="Rechercher dans l'édition…" aria-label="Rechercher">
+""" + feature + """<div class="controls"><input id="search" placeholder="Rechercher une actualité…" aria-label="Rechercher une actualité">
 <button id="all">Tous les sujets</button><button id="favorites">★ Favoris</button></div>
-<section class="grid" id="articles">""" + "\n".join(cards) + """</section>
+<section class="grid" id="articles">""" + "\n".join(cards) + """</section>""" + editorial + """
 <p><a href="/archives.html">Parcourir les archives ↗</a></p></main>
 <footer>LE SIGNAL. · Sources externes à consulter pour confirmer les informations. © Édition """ + esc(DATE) + """ · <a href="/confidentialite.html">Confidentialité et données personnelles</a> · <a href="/a-propos.html">À propos</a> · <a href="/mentions-legales.html">Mentions légales</a></footer>
 <script>const key="signal-favs";let favOnly=false;const fav=new Set(JSON.parse(localStorage.getItem(key)||"[]"));
-const cards=[...document.querySelectorAll(".card")];cards.forEach((c,i)=>{const b=document.createElement("button");b.textContent=fav.has(i)?"★":"☆";b.setAttribute("aria-label","Favori");b.onclick=()=>{fav.has(i)?fav.delete(i):fav.add(i);localStorage.setItem(key,JSON.stringify([...fav]));b.textContent=fav.has(i)?"★":"☆";show()};c.append(b)});
+const cards=[...document.querySelectorAll("#articles .card")];cards.forEach((c,i)=>{const b=document.createElement("button");b.textContent=fav.has(i)?"★":"☆";b.setAttribute("aria-label","Favori");b.onclick=()=>{fav.has(i)?fav.delete(i):fav.add(i);localStorage.setItem(key,JSON.stringify([...fav]));b.textContent=fav.has(i)?"★":"☆";show()};c.append(b)});
 function show(){const q=document.querySelector("#search").value.toLowerCase();cards.forEach((c,i)=>{c.hidden=(!c.textContent.toLowerCase().includes(q))||(favOnly&&!fav.has(i))})}
 document.querySelector("#search").oninput=show;document.querySelector("#all").onclick=()=>{favOnly=false;show()};
 document.querySelector("#favorites").onclick=()=>{favOnly=true;show()};
