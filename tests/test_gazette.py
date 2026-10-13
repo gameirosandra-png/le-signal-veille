@@ -31,5 +31,5 @@ class GazetteTests(unittest.TestCase):
         article={'id':'fixture','titre':'Titre','categorie':'No-Code','date':'2026-10-13','source':'https://example.org/news','resume':'Résumé','impact':'Impact','surveiller':'Suivi'}
         page=module.render([article])
         self.assertIn('Ce que cela change pour vous',page)
-        self.assertIn('querySelectorAll("#articles .card")',page)
+        self.assertIn('src="/reading.js"',page)
         self.assertIn('id="sujet-0"',page)
