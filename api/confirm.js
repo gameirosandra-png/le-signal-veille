@@ -1,8 +1,9 @@
 const n=require('../lib/newsletter');
+const finish=require('../lib/subscription-page');
 module.exports=async(req,res)=>{
  res.setHeader('Cache-Control','no-store');res.setHeader('Referrer-Policy','no-referrer');
  const t=req.query?.token;
- if(!/^[a-f0-9]{64}$/.test(t||'')) return n.response(res,400,'Lien invalide.');
+ if(!/^[a-f0-9]{64}$/.test(t||'')) return finish(req,res,400,'Lien invalide.');
  try{
   try{n.config();}catch{
    n.storageConfig();
