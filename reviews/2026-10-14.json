@@ -1,0 +1,80 @@
+{
+  "date": "2026-10-14",
+  "title": "Plus d’autonomie, toujours des limites.",
+  "articles": [
+    {
+      "id": "airtable-back-to-bases-2026-10-12",
+      "titre": "Airtable prépare de nouveaux outils IA et davantage de contrôle",
+      "categorie": "No-Code",
+      "date": "2026-10-12",
+      "source": "https://community.airtable.com/announcements-6/an-update-on-airtable-s-team-and-what-we-re-building-next-48813",
+      "resume": "Dans sa feuille de route du 12 octobre, Airtable annonce des améliorations mensuelles du socle produit et, pour les prochaines semaines, une évolution d’Omni, Airtable Canvas et un MCP plus capable. L’entreprise prévoit aussi davantage de contrôle au niveau du compte. Elle indique que les offres, les prix et les services ne changent pas à cette date. Ces annonces décrivent des projets, pas une disponibilité générale immédiate.",
+      "impact": "Notre lecture : distinguer les fonctions déjà accessibles des promesses de la feuille de route évite de construire une dépendance sur une fonction encore attendue.",
+      "surveiller": "Les dates de disponibilité, les formules concernées et les droits réellement accordés aux agents."
+    },
+    {
+      "id": "vercel-cli-domain-purchase-2026-10-09",
+      "titre": "Vercel : un agent peut préparer l’achat d’un domaine, avec votre accord final",
+      "categorie": "IA",
+      "date": "2026-10-09",
+      "source": "https://vercel.com/changelog/agents-can-now-buy-domains-with-the-vercel-cli",
+      "resume": "Vercel annonce que ses outils en ligne de commande permettent aux agents de rechercher un domaine, d’en vérifier la disponibilité et le prix, puis de préparer son achat. Le mode non interactif ne termine pas la transaction sans validation humaine : le prix, le renouvellement automatique et les coordonnées du titulaire restent à confirmer.",
+      "impact": "Notre lecture : l’agent peut préparer une décision engageante tout en laissant le choix final à la personne qui paie. Cette séparation est un repère utile pour vos automatisations.",
+      "surveiller": "Le montant exact, le renouvellement et les informations transmises avant toute confirmation."
+    },
+    {
+      "id": "vercel-pro-deployment-storage-2026-10-09",
+      "titre": "Vercel Pro : surveiller le stockage et la conservation des déploiements",
+      "categorie": "Vibe Coding",
+      "date": "2026-10-09",
+      "source": "https://vercel.com/changelog/deployment-storage-pricing-expands-to-existing-teams",
+      "resume": "Vercel annonce l’extension de la facturation Deployment Storage et Functions Storage aux équipes Pro existantes, au tarif de 0,10 dollar par Go et par mois ; la date de début propre à chaque équipe est indiquée par e-mail. À partir du 23 octobre, les déploiements de plus de 30 jours seront supprimés, sauf opposition dans les paramètres de conservation. L’annonce vise les équipes Pro, pas toutes les formules.",
+      "impact": "Notre lecture : la durée d’archivage conditionne aussi les versions disponibles pour revenir en arrière. Vérifier les paramètres est utile avant de multiplier les déploiements.",
+      "surveiller": "Votre formule, l’e-mail de Vercel, l’espace utilisé et la politique de conservation. Un déploiement supprimé ne peut plus servir à un retour arrière."
+    }
+  ],
+  "approved": true,
+  "reviewedAt": "2026-10-13T17:36:06.943165+00:00",
+  "rubriques": {
+    "signal": {
+      "articleId": "airtable-back-to-bases-2026-10-12",
+      "why": "Notre lecture : distinguer les fonctions déjà accessibles des promesses de la feuille de route évite de construire une dépendance sur une fonction encore attendue.",
+      "audience": "Les personnes qui construisent des outils et des automatisations avec Airtable. Les nouveautés annoncées sont à suivre avant de les utiliser."
+    },
+    "practice": {
+      "title": "Dessiner les limites de votre prochain agent",
+      "duration": 15,
+      "requirements": "Exercice proposé sur papier ou dans un document vide. Aucun agent à connecter, aucun achat et aucune modification de service.",
+      "steps": [
+        {
+          "minutes": 3,
+          "title": "Choisir une tâche",
+          "text": "Décrivez un seul résultat attendu : trier des idées, résumer un document ou préparer une comparaison."
+        },
+        {
+          "minutes": 4,
+          "title": "Lister ce qu’il peut lire",
+          "text": "Notez les données strictement nécessaires. Écartez les accès dont la tâche n’a pas besoin."
+        },
+        {
+          "minutes": 5,
+          "title": "Placer les validations",
+          "text": "Séparez les actions que l’agent peut préparer de celles qui attendront votre accord : envoyer, publier, acheter ou modifier des données."
+        },
+        {
+          "minutes": 3,
+          "title": "Prévoir un arrêt",
+          "text": "Décrivez un signal d’échec et une façon de reprendre la main. Gardez cette fiche avant de connecter un outil."
+        }
+      ],
+      "result": "Une fiche avec une tâche, les données utiles, les actions soumises à accord et une condition d’arrêt. Cet exercice ne démontre pas le comportement d’un agent réel.",
+      "limits": "Exercice de réflexion proposé par la rédaction. Il ne prouve pas le comportement d’un agent réel et ne nécessite aucun compte payant.",
+      "source": "https://vercel.com/changelog/agents-can-now-buy-domains-with-the-vercel-cli"
+    },
+    "sandra": {
+      "approved": false
+    },
+    "note": "Notre lecture : une annonce d’autonomie ne suffit pas à rendre un outil utile. Les droits, le coût et la possibilité de reprendre la main comptent autant que la fonctionnalité. Pour un premier essai, décrire ces limites sur papier aide déjà à poser les bonnes questions."
+  },
+  "reviewedHash": "49004b95aa3f465db106487ff9b342d13feb12a88ad06279e49df6616729b31a"
+}
