@@ -147,7 +147,7 @@ footer{border-top:1px solid var(--line);margin-top:45px}#progress{position:fixed
 """ + panel + feature + """<div class="controls"><input id="search" placeholder="Rechercher une actualité…" aria-label="Rechercher une actualité">
 <button id="all">Tous les sujets</button><button id="favorites">★ Favoris</button></div>
 <section class="grid" id="articles">""" + "\n".join(cards) + """</section>""" + editorial + """
-""" + question + """<p><a href="/archives.html">Parcourir les archives ↗</a></p></main>
+""" + question + """<section class="archive-entry" aria-labelledby="archive-entry-title"><div><p class="tag">La mémoire du SIGNAL</p><h2 id="archive-entry-title">Une actualité à retrouver ?</h2><p>Explorez les sujets du journal, un par un, ou retrouvez une édition complète.</p><nav aria-label="Thèmes des archives"><a href="/archives.html?theme=IA">IA</a><a href="/archives.html?theme=No-Code">No-code</a><a href="/archives.html?theme=S%C3%A9curit%C3%A9">Sécurité</a></nav></div><a class="archive-entry-link" href="/archives.html">Explorer les archives →</a></section></main>
 <footer><img class="brand-signature" src="/assets/logo-signal.svg" alt="LE SIGNAL." width="388" height="280" loading="lazy">LE SIGNAL. · Sources externes à consulter pour confirmer les informations. © Édition """ + esc(DATE) + """ · <a href="/confidentialite.html">Confidentialité et données personnelles</a> · <a href="/a-propos.html">À propos</a> · <a href="/mentions-legales.html">Mentions légales</a></footer>
 <script src="/reading.js" defer></script></body></html>"""
     return page.replace("</head>", social_meta("LE SIGNAL. — " + DATE, "/editions/" + DATE + ".html", kind="article") + "</head>")

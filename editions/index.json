@@ -10,10 +10,10 @@
       "verifiedNews": true,
       "articleCount": 3,
       "validatedAt": "2026-10-13T11:34:03.572425+00:00",
-      "validatedHtmlHash": "1d67da6e6f38f8eef677f3b2c31f599e5a715ba8ff500182b009cf8af5de8801",
+      "validatedHtmlHash": "f1b38c21682e01ffb51dcb7d2bacbd58bb164c720b378bad8042bb0c56a28e28",
       "validatedContentHash": "2015f72a12fc766b9e97eaa629a01a94cbf84cbfc95e5e3492efc6f35869687d",
-      "revisionValidatedAt": "2026-10-13T18:24:56.248277+00:00",
-      "revisionNote": "Ajout de repères sourcés de disponibilité. Actualités et date initiale de validation conservées."
+      "revisionValidatedAt": "2026-10-13T18:53:56.280558+00:00",
+      "revisionNote": "Archives mises en avant avec accès par actualité et par thème. Actualités et validation initiale conservées."
     },
     {
       "id": "2026-10-12",

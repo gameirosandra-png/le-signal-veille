@@ -63,7 +63,7 @@ def prepare_page(review, root):
     page = page.replace('<p>Édition du '+review['date']+' · Nouveautés vérifiables, sans recyclage.</p>', '<p>Édition spéciale du '+review['date']+' · Trois annonces officielles des 9 et 12 octobre 2026.</p>')
     note=review['rubriques'].get('note')
     if note:
-        page=page.replace('<p><a href="/archives.html">','<section class="gazette-section"><p class="tag">Le repère de la rédaction</p><h2>Garder la main sur l’autonomie</h2><p>'+esc(note)+'</p></section><p><a href="/archives.html">',1)
+        page=page.replace('<section class="archive-entry"','<section class="gazette-section"><p class="tag">Le repère de la rédaction</p><h2>Garder la main sur l’autonomie</h2><p>'+esc(note)+'</p></section><section class="archive-entry"',1)
     page=page.replace('Consulter le guide officiel →','Lire la source de ce repère →')
     page = page.replace('</main>', (root/'newsletter-form.html').read_text(encoding='utf-8')+'</main>')
     return page.replace('\r\n','\n'), rubriques
