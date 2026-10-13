@@ -150,6 +150,7 @@ const cards=[...document.querySelectorAll("#articles .card")];cards.forEach((c,i
 function show(){const q=document.querySelector("#search").value.toLowerCase();cards.forEach((c,i)=>{c.hidden=(!c.textContent.toLowerCase().includes(q))||(favOnly&&!fav.has(i))})}
 document.querySelector("#search").oninput=show;document.querySelector("#all").onclick=()=>{favOnly=false;show()};
 document.querySelector("#favorites").onclick=()=>{favOnly=true;show()};
+document.querySelector(".feature-link")?.addEventListener("click",()=>{document.querySelector("#search").value="";favOnly=false;show();});
 document.querySelector("#dark").onclick=()=>document.body.classList.toggle("dark");
 onscroll=()=>{const d=document.documentElement;document.querySelector("#progress").style.width=100*d.scrollTop/Math.max(1,d.scrollHeight-d.clientHeight)+"%"};</script></body></html>"""
 
