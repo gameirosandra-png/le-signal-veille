@@ -4,56 +4,86 @@
     {
       "id": "pilote-2026-10-12-ia",
       "categorie": "IA",
-      "titre": "Agents IA : autonomie et supervision",
-      "resume": "Surveiller les capacités d'action des agents, les mécanismes de validation humaine et la traçabilité des opérations.",
-      "source": "https://openai.com/news/",
+      "titre": "Les garde-fous des agents : contrôler au bon moment",
+      "resume": "Le SDK Agents d’OpenAI distingue les contrôles des entrées, des sorties et des appels d’outils. Leur emplacement compte : un contrôle sur l’entrée du premier agent ne vérifie pas automatiquement chaque action des agents suivants.",
+      "source": "https://openai.github.io/openai-agents-python/guardrails/",
       "edition": "2026-10-12",
-      "kind": "repere"
+      "kind": "dossier",
+      "impact": "Notre lecture : pour une action qui modifie des données ou contacte quelqu’un, dessinez d’abord le point de contrôle. Une confirmation humaine et des droits limités doivent être prévus dans le parcours. Ajouter un filtre sur la réponse finale ne suffit pas à annuler une action déjà exécutée.",
+      "surveiller": "Le périmètre réel des outils contrôlés, le mode d’exécution choisi et la différence entre refuser une réponse et empêcher une action.",
+      "verified": true,
+      "checkedAt": "2026-10-13",
+      "dossierUrl": "/dossiers/ia.html"
     },
     {
       "id": "pilote-2026-10-12-make",
       "categorie": "No-Code",
-      "titre": "Make : automatisations observables",
-      "resume": "Vérifier les nouveautés concernant scénarios, erreurs, journaux et intégrations avant d'adapter les processus.",
-      "source": "https://www.make.com/en/blog",
+      "titre": "Make : rendre les erreurs compréhensibles",
+      "resume": "Make rassemble dans sa documentation les erreurs, les avertissements et les gestionnaires d’erreurs. Ces mécanismes servent à diagnostiquer un problème et à définir le comportement d’un scénario lorsqu’un module échoue.",
+      "source": "https://help.make.com/error-handling",
       "edition": "2026-10-12",
-      "kind": "repere"
+      "kind": "dossier",
+      "impact": "Notre lecture : un scénario utile doit permettre de comprendre où il a échoué. Avant d’automatiser une reprise, vérifiez si l’action précédente a déjà eu un effet : envoyer deux fois une confirmation ou créer deux lignes peut être plus gênant que l’erreur initiale.",
+      "surveiller": "La cause de l’erreur, les effets déjà produits et les conditions d’une reprise sans doublon.",
+      "verified": true,
+      "checkedAt": "2026-10-13",
+      "dossierUrl": "/dossiers/make.html"
     },
     {
       "id": "pilote-2026-10-12-n8n",
       "categorie": "No-Code",
-      "titre": "n8n : orchestration et contrôle",
-      "resume": "Suivre les changements de fonctionnalités et les possibilités d'hébergement pour des flux fiables.",
-      "source": "https://blog.n8n.io/",
+      "titre": "n8n : héberger un flux, c’est aussi le maintenir",
+      "resume": "n8n peut être hébergé sur votre infrastructure ou dans un cloud privé. Sa documentation sépare l’installation, la configuration et le maintien en fonctionnement : choisir une méthode de déploiement ne termine pas le travail.",
+      "source": "https://docs.n8n.io/deploy/host-n8n.md",
       "edition": "2026-10-12",
-      "kind": "repere"
+      "kind": "dossier",
+      "impact": "Notre lecture : l’autohébergement donne de la maîtrise, mais demande un responsable identifié. Avant de choisir cette voie, précisez qui suit les mises à jour, contrôle les accès et sait rétablir le service. Un flux important mérite une procédure compréhensible lorsque son serveur ne répond plus.",
+      "surveiller": "Les différences entre éditions, les prérequis de votre méthode de déploiement et l’organisation de la maintenance.",
+      "verified": true,
+      "checkedAt": "2026-10-13",
+      "dossierUrl": "/dossiers/n8n.html"
     },
     {
       "id": "pilote-2026-10-12-github",
       "categorie": "Vibe Coding",
-      "titre": "GitHub : de l'assistance au code vérifiable",
-      "resume": "Observer les évolutions des outils de développement assisté, des tests et des protections des branches.",
-      "source": "https://github.blog/",
+      "titre": "GitHub : relire le code proposé par un agent",
+      "resume": "GitHub présente des agents capables de travailler sur des changements de code et de préparer une pull request. Les journaux de session permettent de suivre les outils utilisés et le travail effectué.",
+      "source": "https://docs.github.com/en/copilot/concepts/copilot-surfaces/copilot-on-github",
       "edition": "2026-10-12",
-      "kind": "repere"
+      "kind": "dossier",
+      "impact": "Notre lecture : une proposition de code devient utile lorsqu’on peut vérifier son effet. Relisez le changement en partant du besoin : quel comportement doit être corrigé, quel test le prouve et quels accès ce code utilise-t-il ? Une belle description de pull request ne constitue pas une preuve de fonctionnement.",
+      "surveiller": "Le périmètre du dépôt, les autorisations de l’agent et la couverture réelle des tests.",
+      "verified": true,
+      "checkedAt": "2026-10-13",
+      "dossierUrl": "/dossiers/github.html"
     },
     {
       "id": "pilote-2026-10-12-tanstack",
       "categorie": "Vibe Coding",
-      "titre": "TanStack : stabilité et sécurité applicative",
-      "resume": "Contrôler les notes de version et les avis de sécurité avant chaque mise à niveau.",
-      "source": "https://tanstack.com/",
+      "titre": "TanStack Query : comprendre la fraîcheur des données",
+      "resume": "Par défaut, TanStack Query considère les données en cache comme périmées. Le paramètre staleTime permet de préciser combien de temps elles restent fraîches. Cette distinction influence les nouvelles récupérations de données.",
+      "source": "https://raw.githubusercontent.com/TanStack/query/main/docs/framework/react/guides/important-defaults.md",
       "edition": "2026-10-12",
-      "kind": "repere"
+      "kind": "dossier",
+      "impact": "Notre lecture : une interface qui se rafraîchit n’est pas forcément instable. Avant de modifier la configuration, identifiez la donnée affichée et le retard acceptable. Un catalogue et un état de paiement n’ont pas les mêmes besoins. La gestion du cache ne remplace pas les contrôles d’accès côté serveur.",
+      "surveiller": "La version installée, les valeurs de fraîcheur et de conservation, ainsi que les conditions de rafraîchissement.",
+      "verified": true,
+      "checkedAt": "2026-10-13",
+      "dossierUrl": "/dossiers/tanstack.html"
     },
     {
       "id": "pilote-2026-10-12-ai-act",
       "categorie": "Réglementation",
-      "titre": "AI Act : obligations à suivre",
-      "resume": "Vérifier le calendrier et les textes applicables dans les sources officielles européennes.",
+      "titre": "AI Act : partir de l’usage pour comprendre les règles",
+      "resume": "La Commission européenne présente l’AI Act comme un cadre fondé sur les risques des usages de l’IA. Les règles distinguent notamment les pratiques interdites, les systèmes à haut risque et certaines obligations de transparence.",
       "source": "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai",
       "edition": "2026-10-12",
-      "kind": "repere"
+      "kind": "dossier",
+      "impact": "Notre lecture : commencez par écrire ce que votre système fait, pour qui et dans quel contexte. Identifiez ensuite votre rôle et consultez le texte applicable et les ressources officielles. Le calendrier et les exceptions doivent être vérifiés pour le cas concret ; ce dossier ne certifie pas la conformité d’un projet.",
+      "surveiller": "Le texte en vigueur, votre rôle, le niveau de risque et les dates applicables à votre usage.",
+      "verified": true,
+      "checkedAt": "2026-10-13",
+      "dossierUrl": "/dossiers/ai-act.html"
     }
   ]
 }

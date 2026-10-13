@@ -145,7 +145,7 @@ footer{border-top:1px solid var(--line);margin-top:45px}#progress{position:fixed
 <div><span>""" + esc(DATE) + """</span> <button id="dark">◐</button> <button onclick="print()">PDF ↗</button></div></header>
 <main><section class="hero"><div class="tag">Journal hebdomadaire · IA & No-Code</div><h1>LE SIGNAL.</h1><p class="publication-promise">Pour les personnes qui construisent avec l’IA et le no-code. Une sélection sourcée chaque semaine, validée avant publication. Abonnement gratuit.</p>
 <p>Ce qui a vraiment changé cette semaine, pourquoi cela compte et ce qu'il faut surveiller.</p></section>
-""" + panel + feature + archive + """<div class="controls"><input id="search" placeholder="Rechercher dans toutes les actualités…" aria-label="Rechercher dans les actualités et les archives">
+""" + feature + panel + archive + """<div class="controls"><input id="search" placeholder="Rechercher dans toutes les actualités…" aria-label="Rechercher dans les actualités et les archives">
 <select id="all" aria-label="Filtrer toutes les actualités par thème"><option value="all">Tous les thèmes</option><option value="IA">IA</option><option value="No-Code">No-Code</option><option value="Vibe Coding">Vibe Coding</option><option value="Sécurité">Sécurité</option><option value="Réglementation">Réglementation</option><option value="Actualités">Actualités</option></select><button id="favorites">★ Favoris</button></div>
 <section class="grid" id="articles">""" + "\n".join(cards) + """</section>""" + editorial + """
 """ + question + """</main>

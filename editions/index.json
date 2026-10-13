@@ -10,10 +10,10 @@
       "verifiedNews": true,
       "articleCount": 3,
       "validatedAt": "2026-10-13T11:34:03.572425+00:00",
-      "validatedHtmlHash": "f37e8cc79cfcde85a17ca7ee5d0a8e21bacd083e42be63d9625424a8e30a7584",
+      "validatedHtmlHash": "19745a410df06160610f5f732a31c6b86ee91588193b553a8f171187d181f2c0",
       "validatedContentHash": "2015f72a12fc766b9e97eaa629a01a94cbf84cbfc95e5e3492efc6f35869687d",
-      "revisionValidatedAt": "2026-10-13T19:20:05.252126+00:00",
-      "revisionNote": "Recherche commune à toutes les actualités et archives, avec classement par thèmes. Contenu éditorial et validation initiale conservés."
+      "revisionValidatedAt": "2026-10-13T20:47:16+00:00",
+      "revisionNote": "Sommaire sous le signal, boutons de navigation et recherche globale à onglets séparée des cartes de l’édition. Validation éditoriale initiale conservée."
     },
     {
       "id": "2026-10-12",
