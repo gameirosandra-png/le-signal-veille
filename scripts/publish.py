@@ -173,7 +173,7 @@ def main():
     edition = ROOT / "editions" / (DATE + ".html")
     if edition.exists():
         raise FileExistsError(str(edition))
-    page = render(articles)
+    page = render(articles).replace("</main>", (ROOT / "newsletter-form.html").read_text(encoding="utf-8") + "</main>")
     edition.write_text(page, encoding="utf-8")
     (ROOT / "index.html").write_text(page, encoding="utf-8")
     catalog["editions"].insert(0, {

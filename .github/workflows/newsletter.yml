@@ -1,0 +1,25 @@
+name: LE SIGNAL — newsletter après publication validée
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: le-signal-newsletter
+  cancel-in-progress: false
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Envoyer uniquement une édition validée et disponible en production
+        env:
+          NEWSLETTER_SECRET: ${{ secrets.NEWSLETTER_SECRET }}
+        run: |
+          if [ -z "$NEWSLETTER_SECRET" ]; then
+            echo 'Newsletter inactive : secret absent.'
+            exit 0
+          fi
+          curl --fail-with-body --max-time 310 --request POST \
+            --header "Authorization: Bearer $NEWSLETTER_SECRET" \
+            https://le-signal-veille.vercel.app/api/dispatch
