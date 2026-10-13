@@ -19,6 +19,7 @@ test('published validated issue sends once; retry is suppressed; missing publica
  setup();const fs=require('node:fs'),read=fs.readFileSync,fetchOriginal=global.fetch;
  const edition={id:'2026-10-13',url:'/editions/2026-10-13.html',title:'Édition test',status:'validee',verifiedNews:true,validatedAt:'2026-10-13T09:00:00Z'};
  const items=Array.from({length:3},()=>({edition:edition.id,titre:'Titre',resume:'Résumé'}));
+ edition.validatedHtmlHash=n.hash('published-html');edition.validatedContentHash=n.contentHash(edition,items);
  const id='f5556ba9-f77d-407f-a90b-e32f9b22ea68';let sent=0,claimed=false,live=true,state;
  const client={release(){},async query(sql){if(sql.startsWith('SELECT'))return {rowCount:1,rows:[{email:'test@example.org'}]};if(sql.startsWith('INSERT')){if(claimed)return {rowCount:0};claimed=true;return {rowCount:1};}if(sql.includes("state='accepted'"))state='accepted';return {rowCount:0,rows:[]};}};
  n.db=()=>({connect:async()=>client,query:async(sql)=>({rows:sql.startsWith('SELECT')&&!claimed?[{id}]:[]})});n.send=async()=>{sent++;return 'realistic-mocked-id';};
@@ -30,5 +31,12 @@ test('published validated issue sends once; retry is suppressed; missing publica
   live=false;let r=res();await handler(req,r);assert.equal(r.code,503);assert.equal(sent,0);
   live=true;r=res();await handler(req,r);assert.equal(r.code,200);assert.equal(sent,1);assert.equal(state,'accepted');
   r=res();await handler(req,r);assert.equal(sent,1);
+  items[0].resume='Modifié après validation';r=res();await handler(req,r);assert.equal(r.code,409);assert.equal(sent,1);
  }finally{fs.readFileSync=read;global.fetch=fetchOriginal;}
+});
+test('unsubscribe remains available when sending is paused and provider credentials removed',async()=>{
+ setup();process.env.NEWSLETTER_ENABLED='false';delete process.env.RESEND_API_KEY;
+ let deleted=false;n.db=()=>({query:async()=>{deleted=true;return {rowCount:1};}});
+ const r=res();await require('../api/unsubscribe')({method:'POST',query:{token:n.token('f5556ba9-f77d-407f-a90b-e32f9b22ea68')}},r);
+ assert.equal(r.code,200);assert.equal(deleted,true);
 });

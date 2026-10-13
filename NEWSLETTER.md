@@ -2,6 +2,8 @@
 
 Le formulaire et les fonctions sont préparés pour Resend et PostgreSQL. **Aucun envoi réel ni base de production n’a été testé.** Les fonctions restent indisponibles tant que les deux interrupteurs d’activation ne sont pas vrais. L’archive pilote reste inchangée et non éligible.
 
+Sandra ne dispose pas de domaine et a choisi de ne pas en acheter le 13 octobre 2026. Le sous-domaine gratuit Vercel ne peut pas être vérifié comme domaine d’envoi Resend. L’abonnement reste en préparation ; le formulaire affiche cet état et désactive son bouton. Le domaine Resend de test est limité à l’adresse du compte Resend. Aucun achat autorisé.
+
 ## Connexions requises
 
 1. Resend : domaine expéditeur vérifié, clé limitée à l’envoi (`RESEND_API_KEY`), expéditeur (`NEWSLETTER_FROM`). Désactiver le suivi des ouvertures et des clics. Configurer et contrôler les rebonds/plaintes avant de lancer une campagne publique ; supprimer les abonnés concernés via un accès administratif privé.
@@ -15,6 +17,8 @@ Le générateur et le workflow de publication restent identiques, hormis l’ins
 
 Le workflow newsletter appelle la production toutes les 30 minutes. Il ne traite que le dernier numéro, avec `status=validee`, `verifiedNews=true` et date de validation. Il vérifie le catalogue public et l’empreinte du HTML public contre les fichiers du déploiement. Seuls les abonnés confirmés avant validation sont inclus. Lots de 8 ; les exécutions suivantes terminent la campagne. Aucun rattrapage des archives pour les nouveaux abonnés.
 
+La validation enregistre aussi les empreintes du HTML et du contenu de l’e-mail (titre, identifiants, titres, résumés, sources). Toute modification après validation bloque l’envoi jusqu’à une nouvelle revue. La désinscription reste disponible lorsque les envois sont en pause, sans clé Resend, tant que la base et le secret de signature restent configurés. Les réponses aux e-mails arrivent au contact de Sandra.
+
 Une clé unique édition/abonné protège les relances et exécutions concurrentes. `accepted` signifie accepté par l’API Resend, **pas livré**. Les états `sending` restés après interruption et `uncertain` ne sont jamais relancés automatiquement : rechercher l’envoi dans les journaux Resend avant toute correction administrative. Ce choix peut omettre un message plutôt que provoquer un doublon. La clé d’idempotence Resend apporte une protection supplémentaire, limitée dans le temps.
 
 ## Recette avant activation publique
@@ -23,4 +27,4 @@ Installer les dépendances et lancer `node --test tests/*.test.js`. Appliquer la
 
 Tester un numéro fictif validé sur un environnement isolé avec un destinataire de test consenti : publication absente/différente → aucun appel Resend ; publication identique → ID Resend enregistré ; deuxième exécution → aucun doublon ; édition bloquée/non vérifiée → aucun appel. Vérifier ensuite le statut de livraison dans Resend et la réception dans la boîte. Ne pas déclarer la recette réussie sur la seule base des tests simulés.
 
-Les tests automatisés fournis utilisent des doubles de la base et du transport : ils ne prouvent ni le déploiement, ni le stockage réel, ni la livraison. Les garanties RGPD dépendent également des informations de l’éditeur et de la configuration des prestataires.
+Les 11 tests Node et le test Python utilisent des doubles de la base et du transport : ils ne prouvent ni le stockage réel, ni la livraison. Ils sont également exécutés par GitHub Actions. Les garanties RGPD dépendent également des informations de l’éditeur et de la configuration des prestataires.

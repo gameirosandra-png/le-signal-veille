@@ -18,6 +18,7 @@ module.exports=async(req,res)=>{
   const articles=registry.items.filter(a=>a.edition===edition?.id);
   if(!n.eligible(edition,articles)||!Number.isFinite(Date.parse(edition.validatedAt)))return n.response(res,200,'Aucune édition validée à envoyer.');
   const local=fs.readFileSync(path.join(root,edition.url),'utf8');
+  if (edition.validatedHtmlHash !== n.hash(local) || edition.validatedContentHash !== n.contentHash(edition, articles)) return n.response(res,409,'Le contenu a changé depuis sa validation. Une nouvelle revue est nécessaire.');
   const remoteCatalog=await fetch(c.SITE_URL+'/editions/index.json',{cache:'no-store',signal:AbortSignal.timeout(10000)});
   if(!remoteCatalog.ok)throw Error('not live');
   const live=(await remoteCatalog.json()).editions[0];
@@ -25,7 +26,7 @@ module.exports=async(req,res)=>{
   const remote=await fetch(c.SITE_URL+edition.url,{cache:'no-store',signal:AbortSignal.timeout(10000)});
   if(!remote.ok||n.hash(await remote.text())!==n.hash(local))throw Error('not live');
   const candidates=await n.db().query(`SELECT id FROM newsletter_subscribers s WHERE confirmed_at IS NOT NULL AND confirmed_at<=$1 AND NOT EXISTS(SELECT 1 FROM newsletter_deliveries d WHERE d.edition=$2 AND d.subscriber=s.id) LIMIT 8`,[edition.validatedAt,edition.id]);
-  let accepted=0;
+  let accepted=0, uncertain=0;
   for(const candidate of candidates.rows){
    const client=await n.db().connect();
    try{
@@ -46,11 +47,12 @@ module.exports=async(req,res)=>{
      const provider=await n.send({to:[still.rows[0].email],subject:edition.title,html:n.emailHtml(edition.title,articles,c.SITE_URL+edition.url,unsub),text:`LE SIGNAL.\n${edition.title}\n\n${articles.map(a=>a.titre+'\n'+a.resume).join('\n\n')}\n\nLire : ${c.SITE_URL+edition.url}\nSe désinscrire : ${unsub}`,headers:{'List-Unsubscribe':`<${unsub}>`,'List-Unsubscribe-Post':'List-Unsubscribe=One-Click'}},'edition/'+edition.id+'/'+candidate.id);
      await client.query("UPDATE newsletter_deliveries SET state='accepted',provider_id=$3 WHERE edition=$1 AND subscriber=$2",[edition.id,candidate.id,provider]);accepted++;
     }catch{
+     uncertain++;
      await client.query("UPDATE newsletter_deliveries SET state='uncertain' WHERE edition=$1 AND subscriber=$2",[edition.id,candidate.id]);
     }
     await client.query('COMMIT');
    }catch{await client.query('ROLLBACK');throw Error('dispatch');}finally{client.release();}
   }
-  return n.response(res,200,`${accepted} demande(s) acceptée(s) par Resend. La livraison reste à vérifier dans Resend.`);
+  return n.response(res,uncertain?503:200,`${accepted} demande(s) acceptée(s) par Resend. ${uncertain} envoi(s) à examiner dans les journaux. La livraison reste à vérifier dans Resend.`);
  }catch{return n.response(res,503,'Envoi indisponible ou publication non confirmée.');}
 };
