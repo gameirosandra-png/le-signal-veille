@@ -16,6 +16,8 @@ class ReviewedPublicationTests(unittest.TestCase):
         self.review=json.loads((ROOT/'reviews/2026-10-14.json').read_text(encoding='utf-8'))
         self.catalog=json.loads((ROOT/'editions/index.json').read_text(encoding='utf-8'))
         self.registry=json.loads((ROOT/'data/sujets.json').read_text(encoding='utf-8'))
+        self.catalog['editions']=[e for e in self.catalog['editions'] if e['id']!='2026-10-14']
+        self.registry['items']=[a for a in self.registry['items'] if a.get('edition')!='2026-10-14']
         self.when=dt.datetime(2026,10,14,7,tzinfo=dt.timezone.utc)
     def test_modified_review_and_early_publication_are_refused(self):
         for field in ['title','date']:
@@ -32,6 +34,8 @@ class ReviewedPublicationTests(unittest.TestCase):
             root=pathlib.Path(directory)
             for name in ['data/rubriques.json','data/sujets.json','editions/index.json','newsletter-form.html','editions/2026-10-13.html']:
                 target=root/name;target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(ROOT/name,target)
+            (root/'editions/index.json').write_text(json.dumps(self.catalog),encoding='utf-8')
+            (root/'data/sujets.json').write_text(json.dumps(self.registry),encoding='utf-8')
             archived=(root/'editions/2026-10-13.html').read_bytes()
             old=self.catalog['editions'][0]
             edition=publish_review(self.review,root,self.when)

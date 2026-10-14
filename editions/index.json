@@ -2,6 +2,19 @@
   "schemaVersion": 1,
   "editions": [
     {
+      "id": "2026-10-14",
+      "date": "2026-10-14",
+      "title": "LE SIGNAL. — Plus d’autonomie, toujours des limites.",
+      "url": "/editions/2026-10-14.html",
+      "status": "validee",
+      "verifiedNews": true,
+      "articleCount": 3,
+      "validatedAt": "2026-10-14T09:01:13.790567+00:00",
+      "editoriallyReviewedAt": "2026-10-13T17:36:06.943165+00:00",
+      "validatedHtmlHash": "3848079d3917d8b03ae0f576be5b1a66e245957a41032b9bc32c2d16094bc35c",
+      "validatedContentHash": "d10c651031b82999ec6065a87e3cd0bfee871cf7b04125361715b4b49eb378f6"
+    },
+    {
       "id": "2026-10-13",
       "date": "2026-10-13",
       "title": "LE SIGNAL. — Automatiser mieux, vérifier davantage",

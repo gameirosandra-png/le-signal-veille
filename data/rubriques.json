@@ -12,10 +12,26 @@
         "duration": 15,
         "requirements": "Un compte Make et un scénario d’essai utilisant uniquement des données fictives, sans envoi de message ni modification d’un service externe. Laissez sa planification désactivée.",
         "steps": [
-          {"minutes": 3, "title": "Poser votre point de départ", "text": "Ouvrez le scénario d’essai. Avec « Save as version » / « Save a version », enregistrez une version décrite comme « Point de départ — exercice LE SIGNAL ». Repérez la valeur d’un paramètre fictif pour pouvoir la reconnaître ensuite."},
-          {"minutes": 4, "title": "Faire un changement lisible", "text": "Modifiez uniquement ce paramètre fictif, sans exécuter le scénario. Enregistrez une nouvelle version et décrivez précisément la modification : ancienne valeur, nouvelle valeur et raison du test."},
-          {"minutes": 5, "title": "Retrouver le bon état", "text": "Ouvrez « Version history ». Retrouvez le point de départ grâce à sa description, restaurez-le dans ce scénario d’essai, puis sauvegardez : Make ne sauvegarde pas automatiquement une version restaurée."},
-          {"minutes": 3, "title": "Vérifier votre résultat", "text": "Contrôlez que le paramètre fictif a retrouvé sa valeur initiale. Vous devez pouvoir expliquer ce qui a changé et quelle version vous avez restaurée. Gardez le scénario inactif."}
+          {
+            "minutes": 3,
+            "title": "Poser votre point de départ",
+            "text": "Ouvrez le scénario d’essai. Avec « Save as version » / « Save a version », enregistrez une version décrite comme « Point de départ — exercice LE SIGNAL ». Repérez la valeur d’un paramètre fictif pour pouvoir la reconnaître ensuite."
+          },
+          {
+            "minutes": 4,
+            "title": "Faire un changement lisible",
+            "text": "Modifiez uniquement ce paramètre fictif, sans exécuter le scénario. Enregistrez une nouvelle version et décrivez précisément la modification : ancienne valeur, nouvelle valeur et raison du test."
+          },
+          {
+            "minutes": 5,
+            "title": "Retrouver le bon état",
+            "text": "Ouvrez « Version history ». Retrouvez le point de départ grâce à sa description, restaurez-le dans ce scénario d’essai, puis sauvegardez : Make ne sauvegarde pas automatiquement une version restaurée."
+          },
+          {
+            "minutes": 3,
+            "title": "Vérifier votre résultat",
+            "text": "Contrôlez que le paramètre fictif a retrouvé sa valeur initiale. Vous devez pouvoir expliquer ce qui a changé et quelle version vous avez restaurée. Gardez le scénario inactif."
+          }
         ],
         "result": "Vous savez identifier une modification et retrouver une version connue, sans déclencher d’action externe.",
         "limits": "Fonction annoncée sur toutes les formules. L’exercice ne nécessite pas d’exécution de scénario ; les quotas de votre compte restent applicables. Make indique conserver les versions 60 jours, sauf la plus récente. Les intitulés peuvent varier selon l’interface.",
@@ -25,6 +41,47 @@
         "approved": true,
         "text": "Ce que je retiens cette semaine : une automatisation utile doit aussi être compréhensible. Avant d’ajouter de l’autonomie, je préfère pouvoir expliquer ce qui se passe, repérer un échec et revenir à une version connue. Mon filtre : est-ce que cette nouveauté rend le projet plus simple à piloter ?"
       }
+    },
+    "2026-10-14": {
+      "signal": {
+        "articleId": "airtable-back-to-bases-2026-10-12",
+        "why": "Notre lecture : distinguer les fonctions déjà accessibles des promesses de la feuille de route évite de construire une dépendance sur une fonction encore attendue.",
+        "audience": "Les personnes qui construisent des outils et des automatisations avec Airtable. Les nouveautés annoncées sont à suivre avant de les utiliser."
+      },
+      "practice": {
+        "title": "Dessiner les limites de votre prochain agent",
+        "duration": 15,
+        "requirements": "Exercice proposé sur papier ou dans un document vide. Aucun agent à connecter, aucun achat et aucune modification de service.",
+        "steps": [
+          {
+            "minutes": 3,
+            "title": "Choisir une tâche",
+            "text": "Décrivez un seul résultat attendu : trier des idées, résumer un document ou préparer une comparaison."
+          },
+          {
+            "minutes": 4,
+            "title": "Lister ce qu’il peut lire",
+            "text": "Notez les données strictement nécessaires. Écartez les accès dont la tâche n’a pas besoin."
+          },
+          {
+            "minutes": 5,
+            "title": "Placer les validations",
+            "text": "Séparez les actions que l’agent peut préparer de celles qui attendront votre accord : envoyer, publier, acheter ou modifier des données."
+          },
+          {
+            "minutes": 3,
+            "title": "Prévoir un arrêt",
+            "text": "Décrivez un signal d’échec et une façon de reprendre la main. Gardez cette fiche avant de connecter un outil."
+          }
+        ],
+        "result": "Une fiche avec une tâche, les données utiles, les actions soumises à accord et une condition d’arrêt. Cet exercice ne démontre pas le comportement d’un agent réel.",
+        "limits": "Exercice de réflexion proposé par la rédaction. Il ne prouve pas le comportement d’un agent réel et ne nécessite aucun compte payant.",
+        "source": "https://vercel.com/changelog/agents-can-now-buy-domains-with-the-vercel-cli"
+      },
+      "sandra": {
+        "approved": false
+      },
+      "note": "Notre lecture : une annonce d’autonomie ne suffit pas à rendre un outil utile. Les droits, le coût et la possibilité de reprendre la main comptent autant que la fonctionnalité. Pour un premier essai, décrire ces limites sur papier aide déjà à poser les bonnes questions."
     }
   }
 }

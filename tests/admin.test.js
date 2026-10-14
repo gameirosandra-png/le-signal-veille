@@ -21,7 +21,7 @@ test('authorized dashboard uses bounded parameterized filters and reports valida
  a.session=async()=>({user:{email:a.OWNER,emailVerified:true}});const calls=[];
  n.db=()=>({query:async(sql,args)=>{calls.push({sql,args});if(sql.includes('AS confirmed'))return {rows:[{confirmed:1,pending:0,suppressed:0}]};if(sql.includes('AS total'))return {rows:[{total:1}]};return {rows:[]};}});
  const r=res();const search="x' OR 1=1 --";await require('../api/admin-data')({method:'GET',headers:{},query:{search,status:'confirmed',page:'-99'}},r);
- assert.equal(r.code,200);assert.equal(r.body.page,1);assert.equal(r.body.editions[0].fingerprints,true);assert.equal(r.body.editions[1].fingerprints,false);
+ assert.equal(r.code,200);assert.equal(r.body.page,1);assert.equal(r.body.editions[0].fingerprints,true);assert.equal(r.body.editions.find(e=>e.id==='2026-10-12').fingerprints,false);
  const filtered=calls.find(x=>x.sql.includes('LIMIT 25'));assert.deepEqual(filtered.args,[search,'confirmed',0]);assert.ok(!filtered.sql.includes(search));
 });
 test('authorized magic link request pins destination and forwards secure session cookies',async()=>{
