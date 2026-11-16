@@ -81,14 +81,16 @@ def validate(edition, history, date):
     if edition["rubriques"].get("sandra", {}).get("approved"):
         raise ValueError("Une note personnelle requiert une approbation explicite.")
 
-def research(instruction):
+def research(instruction, expected):
     model = os.environ.get("OPENAI_MODEL", "gpt-5.4-mini")
     request = urllib.request.Request(
         publish.API, data=json.dumps({
             "model": model, "reasoning": {"effort": "low"},
             "tools": [{"type": "web_search"}], "tool_choice": "auto",
             "include": ["web_search_call.action.sources"], "max_tool_calls": 18,
-            "max_output_tokens": 18000, "store": False, "input": instruction,
+            "max_output_tokens": 18000, "store": False,
+            "instructions": "Tu produis les données éditoriales demandées, jamais des modifications ou un compte rendu d’exécution. Après tes recherches, termine par un seul objet JSON contenant ces clés exactes : " + ", ".join(expected) + ".",
+            "input": instruction,
         }).encode(),
         headers={"Authorization": "Bearer " + os.environ["OPENAI_API_KEY"],
                  "Content-Type": "application/json"}, method="POST",
@@ -117,7 +119,8 @@ def research(instruction):
         if item["type"] == "message":
             for part in item["content"]:
                 if part["type"] == "output_text":
-                    texts.append(part["text"])
+                    if item.get("phase") != "commentary":
+                        texts.append(part["text"])
                     urls.update(a.get("url", "") for a in part.get("annotations", []))
     if not any(item["type"] == "web_search_call" and item.get("status") == "completed" for item in result["output"]):
         raise ValueError("La recherche web n’a pas été exécutée.")
@@ -128,15 +131,20 @@ def research(instruction):
         except (TypeError, ValueError):
             continue
     raw = "\n".join(texts).strip()
-    fence = re.search(r"\x60{3}(?:json)?\s*(.*?)\s*\x60{3}", raw, re.DOTALL)
-    raw = fence[1] if fence else raw
-    start = raw.find("{")
-    if start < 0:
-        types = ", ".join(item["type"] for item in result["output"])
-        raise ValueError(f"Aucun objet éditorial renvoyé ({types}, {len(raw)} caractères).")
-    non_json = re.compile(r"\ue200cite\ue202.*?\ue201")
-    document, _ = json.JSONDecoder().raw_decode(non_json.sub("", raw[start:]))
-    return document, evidence
+    raw = re.sub(r"\ue200cite\ue202.*?\ue201", "", raw)
+    decoder = json.JSONDecoder()
+    candidate_keys = set()
+    for match in re.finditer(r"(?m)^\s*\{", raw):
+        offset = raw.index("{", match.start())
+        try:
+            document, _ = decoder.raw_decode(raw[offset:])
+        except json.JSONDecodeError:
+            continue
+        if set(expected).issubset(document):
+            return document, evidence
+        candidate_keys.update(key for key in document if re.fullmatch(r"[a-zA-Z_]{1,30}", key))
+    detail = ", ".join(sorted(candidate_keys)[:20])
+    raise ValueError(f"Objet éditorial invalide ({len(raw)} caractères, clés détectées : {detail}).")
 
 def require_sources(edition, evidence):
     missing = []
@@ -162,7 +170,7 @@ statut est Vérifié, Annoncé ou Expérimental. date et dateEvenement sont ISO.
 justifier un événement antérieur de plus d’une semaine. Pour une mise à jour, renseigne
 miseAJour: {id, changement}. Aucun nombre d’articles imposé. Aucune note personnelle de Sandra.
 Les analyses individuelles et transversales doivent ensemble permettre 8 à 12 minutes de lecture.
-""" + context)
+""" + context, ("date", "title", "work", "watch", "articles"))
     validate(draft, history, date)
     require_sources(draft, evidence)
     verdict, checked = research(master + """
@@ -172,7 +180,7 @@ compare chaque fait au registre et aux archives et juge individuellement tous le
 Utilise le moteur de recherche avant de renvoyer le verdict. Un doublon sémantique, une preuve manquante, une attribution trompeuse ou une analyse superficielle
 impose un refus. Ne réécris ni le brouillon ni l’historique. Retourne un objet JSON : approved (booléen),
 errors (liste), articles (liste de {id, verified, reasoning}, avec verified booléen et reasoning circonstancié).
-""" + context + "\nBrouillon : " + json.dumps(draft, ensure_ascii=False))
+""" + context + "\nBrouillon : " + json.dumps(draft, ensure_ascii=False), ("approved", "errors", "articles"))
     require_sources(draft, checked)
     reviewed = {a["id"]: a for a in verdict["articles"]}
     if verdict.get("approved") is not True or verdict.get("errors") != [] or any(
