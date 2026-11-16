@@ -4,27 +4,12 @@ Journal hebdomadaire interactif sur l'IA, le no-code, le vibe coding et les suje
 
 ## Publication automatique
 
-Workflow : `.github/workflows/publier.yml`. Il s'exécute le lundi à 09:00 **Europe/Paris**, été comme hiver, et peut être lancé manuellement dans **GitHub → Actions → LE SIGNAL — publication hebdomadaire → Run workflow**.
+GitHub Actions est le circuit de publication de LE SIGNAL. Le déclenchement est unique dans le dépôt, le lundi à 09:00 Europe/Paris, et une exécution manuelle avec `test_mode` produit un aperçu sans publication. Un changement du prompt sur main déclenche aussi un essai sans publication. La newsletter ne possède aucun calendrier d’envoi.
 
-**Configuration requise avant le premier lancement :**
+Le workflow lit le prompt intégral dans `PROMPT-MAITRE.md`, consulte les archives et le registre Git, puis soumet les faits à deux appels distincts de l’API OpenAI avec recherche web. Les URL doivent figurer dans les résultats de recherche des deux passages. Une revue contradictoire compare le brouillon aux sources et compare les événements à l’historique. Les contrôles déterministes vérifient ensuite les dates, métadonnées, doublons et conditions de publication. Un échec bloque le commit et laisse la dernière édition en ligne.
 
-1. Créer une clé API OpenAI avec une limite de dépenses adaptée sur https://platform.openai.com/api-keys.
-2. Dans GitHub → dépôt `le-signal-veille` → Settings → Secrets and variables → Actions → New repository secret, créer le secret `OPENAI_API_KEY` et y coller la clé. Ne jamais mettre cette clé dans un fichier ou dans le chat.
-3. Dans GitHub → Settings → Actions → General, vérifier que le workflow dispose de la permission **Read and write permissions** pour publier les fichiers (ou que la politique du dépôt permet le `GITHUB_TOKEN` en écriture).
-4. Lancer une première exécution manuelle, vérifier les logs, le commit, la nouvelle archive et la publication Vercel.
+Configurer `OPENAI_API_KEY` dans GitHub Actions. Les deux appels sont limités à 18 recherches et 12 000 jetons de sortie chacun. Les appels API sont facturés sur le compte API existant, indépendamment de ChatGPT. Le modèle peut être changé via l’environnement du workflow.
 
-La génération utilise l'API OpenAI avec recherche web, facturée **séparément de ChatGPT**. Modèle par défaut : `gpt-4.1-mini` (modifiable avec `OPENAI_MODEL` au niveau du workflow). La tâche ChatGPT « Veille IA & No-code » existe toujours, mais **ne fournit pas directement son HTML à GitHub** : le workflow utilise son propre générateur et risque donc de produire une veille distincte. Éviter les doubles publications et aligner les prompts si nécessaire.
+L’édition validée est publiée sur `main` avec son dossier de revue, l’accueil, l’archive et le registre. Vercel est connecté à cette branche. Le workflow compare les fichiers servis par le domaine public aux fichiers produits. Le HTML autonome `Le_Signal_YYYY-MM-DD.html` et le rapport de revue sont disponibles dans les artefacts du lancement. Le formulaire d’abonnement reste sur le site public.
 
-## Organisation
-
-- `index.html` : édition affichée à l'accueil.
-- `editions/YYYY-MM-DD.html` : archives conservées.
-- `editions/index.json` : catalogue des numéros.
-- `data/sujets.json` : registre des sujets publiés.
-- `scripts/publish.py` : collecte des nouveautés, contrôle de base des doublons, génération HTML, mise à jour du registre.
-
-La publication n'a lieu que si le générateur retient de nouveaux sujets. Le filtrage automatique des doublons compare ID, URL et titre ; il ne garantit pas l'absence de doublons sémantiques. Les sources et faits doivent être vérifiés éditorialement : les réponses du modèle peuvent être inexactes. Le catalogue marque donc les numéros automatiques `verifiedNews: false` tant qu'une vérification indépendante n'a pas eu lieu.
-
-## État
-
-GitHub est connecté au projet Vercel existant `le-signal-veille` ; un déploiement Git est confirmé. L'automatisation **ne sera complètement opérationnelle qu'après ajout du secret, vérification des permissions et premier test réussi**. Discord n'est pas connecté.
+Pour restaurer le dernier état valide, relever le commit du numéro à retirer et créer un commit de réversion sur `main`. Attendre le déploiement Vercel et contrôler l’accueil et le catalogue publics. Examiner les erreurs GitHub Actions avant de relancer le workflow.

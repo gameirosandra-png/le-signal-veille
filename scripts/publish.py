@@ -2,6 +2,7 @@
 """LE SIGNAL: collecte sourcée, anti-doublons, archivage et publication atomique."""
 import datetime as dt
 import html
+from html.parser import HTMLParser
 import json
 import os
 import pathlib
@@ -104,7 +105,70 @@ def clean_articles(raw, prior):
             continue
         seen_ids.add(ident); seen_urls.add(source); seen_titles.add(title)
         chosen.append(a)
-    return chosen[:8]
+    return chosen
+
+
+class ArchivedArticles(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.articles = []
+        self.current = None
+
+    def handle_starttag(self, tag, attrs):
+        attributes = dict(attrs)
+        if tag == "article":
+            self.current = {"text": [], "links": []}
+        if self.current is not None and tag == "a" and attributes.get("href", "").startswith("https://"):
+            self.current["links"].append(attributes["href"])
+
+    def handle_data(self, data):
+        if self.current is not None and data.strip():
+            self.current["text"].append(data.strip())
+
+    def handle_endtag(self, tag):
+        if tag == "article" and self.current is not None:
+            self.articles.append(self.current)
+            self.current = None
+
+def archive_articles(path):
+    parser = ArchivedArticles()
+    parser.feed(path.read_text(encoding="utf-8"))
+    return parser.articles
+
+def article_context(article):
+    if not article.get("angle"):
+        return ""
+    esc = html.escape
+    parts = [article["statut"], article["angle"]]
+    if article["dateEvenement"] != article["date"]:
+        parts.append("Événement : " + article["dateEvenement"])
+    text = '<p class="tag">' + esc(" · ".join(parts)) + '</p>'
+    text += '<p><strong>Pourquoi ce sujet compte.</strong> ' + esc(article["inclusion"]) + '</p>'
+    text += '<p><strong>Limites de la vérification.</strong> ' + esc(article["limites"]) + '</p>'
+    if article.get("miseAJour"):
+        text += '<p><strong>Mise à jour importante.</strong> ' + esc(article["miseAJour"]["changement"]) + '</p>'
+    for link in article["sourcesComplementaires"]:
+        text += '<p><a href="' + esc(link) + '" rel="noopener noreferrer">Source complémentaire ↗</a></p>'
+    return text
+
+def standalone(review, page, root=ROOT):
+    site = "https://le-signal-veille-sandra-9783.vercel.app"
+    for css in ("brand.css", "gazette.css", "reading.css"):
+        page = page.replace(f'<link rel="stylesheet" href="/{css}">', "<style>" + (root/css).read_text(encoding="utf-8") + "</style>")
+    for asset in ("favicon-signal.svg", "logo-signal.svg"):
+        import base64
+        uri = "data:image/svg+xml;base64," + base64.b64encode((root/"assets"/asset).read_bytes()).decode()
+        page = page.replace("/assets/" + asset, uri)
+    form = (root/"newsletter-form.html").read_text(encoding="utf-8")
+    page = page.replace(form.strip(), f'<p><a href="{site}/#newsletter-title">S’abonner sur le site</a></p>')
+    for script in ("news-index.js", "reading.js", "newsletter.js"):
+        page = re.sub(r'<script src="/' + re.escape(script) + r'" defer></script>', "", page)
+    page = re.sub(r'(href|src)="(/[^"]*)"', lambda m: m[1] + '="' + site + m[2] + '"', page)
+    script = (root/"scripts/offline.js").read_text(encoding="utf-8")
+    page = page.replace("</body>", "<script>" + script + "</script></body>")
+    name = "Le_Signal_" + review["date"] + ".html"
+    (root/name).write_text(page, encoding="utf-8")
+    return root/name
 
 
 def render(articles):
@@ -119,7 +183,7 @@ def render(articles):
             esc(a["categorie"]) + ' · ' + esc(a["date"]) + '</div>' + marker(a, ROOT) + '<h2>' + esc(a["titre"]) +
             '</h2><p>' + esc(a["resume"]) + '</p><p><strong>Ce que cela change pour vous :</strong> ' +
             esc(a["impact"]) + '</p><details><summary>À surveiller</summary><p>' +
-            esc(a["surveiller"]) + '</p></details><a target="_blank" rel="noopener noreferrer" href="' +
+            esc(a["surveiller"]) + '</p></details>' + article_context(a) + '<a target="_blank" rel="noopener noreferrer" href="' +
             esc(a["source"]) + '">Lire la source ↗</a></article>')
     if not cards:
         cards = ['<div class="card"><h2>Pas de nouveauté vérifiable cette semaine</h2><p>LE SIGNAL préfère ne rien inventer plutôt que recycler les annonces précédentes.</p></div>']
@@ -146,7 +210,7 @@ footer{border-top:1px solid var(--line);margin-top:45px}#progress{position:fixed
 <main><section class="hero"><div class="tag">Journal hebdomadaire · IA & No-Code</div><h1>LE SIGNAL.</h1><p class="publication-promise">Pour les personnes qui construisent avec l’IA et le no-code. Une sélection sourcée chaque semaine, validée avant publication. Abonnement gratuit.</p>
 <p>Ce qui a vraiment changé cette semaine, pourquoi cela compte et ce qu'il faut surveiller.</p></section>
 """ + feature + panel + archive + """<div class="controls"><input id="search" placeholder="Rechercher dans toutes les actualités…" aria-label="Rechercher dans les actualités et les archives">
-<select id="all" aria-label="Filtrer toutes les actualités par thème"><option value="all">Tous les thèmes</option><option value="IA">IA</option><option value="No-Code">No-Code</option><option value="Vibe Coding">Vibe Coding</option><option value="Sécurité">Sécurité</option><option value="Réglementation">Réglementation</option><option value="Actualités">Actualités</option></select><button id="favorites">★ Favoris</button></div>
+<select id="all" aria-label="Filtrer toutes les actualités par thème"><option value="all">Tous les thèmes</option><option value="IA">IA</option><option value="No-Code">No-Code</option><option value="Vibe Coding">Vibe Coding</option><option value="Sécurité">Sécurité</option><option value="Réglementation">Réglementation</option><option value="Actualités">Actualités</option><option value="Mise à jour importante">Mises à jour importantes</option></select><button id="favorites">★ Favoris</button></div>
 <section class="grid" id="articles">""" + "\n".join(cards) + """</section>""" + editorial + """
 """ + question + """</main>
 <footer><img class="brand-signature" src="/assets/logo-signal.svg" alt="LE SIGNAL." width="388" height="280" loading="lazy">LE SIGNAL. · Sources externes à consulter pour confirmer les informations. © Édition """ + esc(DATE) + """ · <a href="/confidentialite.html">Confidentialité et données personnelles</a> · <a href="/a-propos.html">À propos</a> · <a href="/mentions-legales.html">Mentions légales</a></footer>

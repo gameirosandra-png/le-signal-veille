@@ -17,6 +17,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 
 def review_hash(review):
     payload = {key: review[key] for key in ('date', 'title', 'articles', 'rubriques')}
+    payload.update((key, review[key]) for key in ("work", "watch", "vibeAbsent") if key in review)
     raw = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(',', ':'))
     return hashlib.sha256(raw.encode('utf-8')).hexdigest()
 
@@ -36,7 +37,8 @@ def check_review(review, catalog, registry, now):
         selected = publish.clean_articles(review['articles'], registry['items'])
     finally:
         publish.TODAY, publish.DATE = old_today, old_date
-    if len(selected) < 3 or selected != review['articles']:
+    minimum = 1 if "work" in review else 3
+    if len(selected) < minimum or selected != review['articles']:
         raise ValueError('Reviewed articles fail recency, source or duplicate checks.')
 
 def prepare_page(review, root):
@@ -59,8 +61,16 @@ def prepare_page(review, root):
     page = page.replace('<h1>LE SIGNAL.</h1>', '<h1>'+esc(review['title'])+'</h1>')
     page = page.replace('<title>LE SIGNAL. — '+review['date']+'</title>', '<title>'+esc(review['title'])+' — LE SIGNAL.</title>')
     page = page.replace('content="LE SIGNAL. — '+review['date']+'"', 'content="'+esc(review['title'])+' — LE SIGNAL."')
-    page = page.replace('Journal hebdomadaire · IA &amp; No-Code','Édition spéciale · IA &amp; No-Code').replace('Journal hebdomadaire · IA & No-Code','Édition spéciale · IA & No-Code')
-    page = page.replace('<p>Édition du '+review['date']+' · Nouveautés vérifiables, sans recyclage.</p>', '<p>Édition spéciale du '+review['date']+' · Trois annonces officielles des 9 et 12 octobre 2026.</p>')
+    if "work" in review:
+        navigation = '<nav aria-label="Sommaire"><a href="#faits">Ce qui s’est passé</a> · <a href="#travail">Pourquoi c’est important pour mon travail</a> · <a href="#suite">Ce qu’il faut surveiller ensuite</a></nav>'
+        page = page.replace('</section>', navigation + '</section>', 1)
+        page = page.replace('<section class="grid" id="articles">', '<h2 id="faits">Ce qui s’est passé</h2><section class="grid" id="articles">')
+        sections = '<section class="gazette-section"><h2 id="travail">Pourquoi c’est important pour mon travail</h2>' + ''.join('<p>'+esc(p)+'</p>' for p in review["work"].splitlines() if p.strip()) + '</section>'
+        sections += '<section class="gazette-section"><h2 id="suite">Ce qu’il faut surveiller ensuite</h2>' + ''.join('<p>'+esc(p)+'</p>' for p in review["watch"].splitlines() if p.strip()) + '</section>'
+        page = page.replace('</main>', sections + '</main>')
+    else:
+        page = page.replace('Journal hebdomadaire · IA &amp; No-Code','Édition spéciale · IA &amp; No-Code').replace('Journal hebdomadaire · IA & No-Code','Édition spéciale · IA & No-Code')
+        page = page.replace('<p>Édition du '+review['date']+' · Nouveautés vérifiables, sans recyclage.</p>', '<p>Édition spéciale du '+review['date']+' · Trois annonces officielles des 9 et 12 octobre 2026.</p>')
     note=review['rubriques'].get('note')
     if note:
         page=page.replace('<section class="reader-question"','<section class="gazette-section"><p class="tag">Le repère de la rédaction</p><h2>Garder la main sur l’autonomie</h2><p>'+esc(note)+'</p></section><section class="reader-question"',1)

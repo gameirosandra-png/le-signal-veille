@@ -1,5 +1,8 @@
 name: LE SIGNAL — publication hebdomadaire
 on:
+  push:
+    branches: [main]
+    paths: [PROMPT-MAITRE.md]
   schedule:
     - cron: "0 9 * * 1"
       timezone: "Europe/Paris"
@@ -18,6 +21,8 @@ concurrency:
 jobs:
   edition:
     runs-on: ubuntu-latest
+    env:
+      PUBLISH: ${{ (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && !inputs.test_mode)) && '1' || '0' }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -49,64 +54,62 @@ jobs:
             echo "::error::Ajouter OPENAI_API_KEY dans Settings > Secrets and variables > Actions."
             exit 1
           fi
-      - name: Générer un brouillon pour revue
+      - name: Rechercher, vérifier et préparer le numéro
         if: steps.issue.outputs.reviewed != 'true'
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          SIGNAL_TEST_MODE: '1'
-        run: python scripts/publish.py
-      - name: Conserver le brouillon
-        if: steps.issue.outputs.reviewed != 'true'
-        uses: actions/upload-artifact@v4
-        with:
-          name: le-signal-test-preview
-          path: test-preview.html
-          if-no-files-found: error
+          SIGNAL_TEST_MODE: ${{ env.PUBLISH == '1' && '0' || '1' }}
+        run: python scripts/editorial.py
       - name: Préparer l’édition validée
         if: steps.issue.outputs.reviewed == 'true'
         env:
           EDITION_DATE: ${{ steps.issue.outputs.date }}
-          TEST_MODE: ${{ github.event_name == 'workflow_dispatch' && inputs.test_mode }}
+          TEST_MODE: ${{ env.PUBLISH != '1' }}
         run: |
           if [ "$TEST_MODE" = true ]; then
             python scripts/publish_reviewed.py "reviews/$EDITION_DATE.json" --preview test-preview.html
           else
             python scripts/publish_reviewed.py "reviews/$EDITION_DATE.json"
           fi
-      - name: Conserver l’aperçu validé
-        if: steps.issue.outputs.reviewed == 'true' && github.event_name == 'workflow_dispatch' && inputs.test_mode
+      - name: Conserver le HTML autonome et le rapport
+        if: always() && !cancelled()
         uses: actions/upload-artifact@v4
         with:
-          name: le-signal-validated-preview
-          path: test-preview.html
-          if-no-files-found: error
-      - name: Bloquer la publication en l’absence de revue
-        if: steps.issue.outputs.reviewed != 'true' && !(github.event_name == 'workflow_dispatch' && inputs.test_mode)
-        run: |
-          echo "::error::Le brouillon ne dispose pas d’une validation éditoriale."
-          exit 1
+          name: le-signal-edition
+          path: |
+            Le_Signal_*.html
+            test-preview.html
+            editorial-report.json
+          if-no-files-found: warn
+      - name: Tester les fonctions critiques
+        if: env.PUBLISH == '1'
+        run: python -m unittest discover -s tests
       - name: Commit et publication
-        if: steps.issue.outputs.reviewed == 'true' && !(github.event_name == 'workflow_dispatch' && inputs.test_mode)
+        if: env.PUBLISH == '1'
         env:
           EDITION_DATE: ${{ steps.issue.outputs.date }}
         run: |
-          if git diff --quiet && [ -z "$(git ls-files --others --exclude-standard)" ]; then
+          if git diff --quiet -- editions/index.json; then
             echo "Aucune nouvelle édition à publier."
             exit 0
           fi
           git config user.name "le-signal-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html "editions/$EDITION_DATE.html" editions/index.json data/sujets.json data/rubriques.json
+          git add index.html "editions/$EDITION_DATE.html" editions/index.json data/sujets.json data/rubriques.json "reviews/$EDITION_DATE.json"
           git commit -m "LE SIGNAL : édition hebdomadaire automatisée"
           git push
       - name: Vérifier le numéro sur le site public
-        if: steps.issue.outputs.reviewed == 'true' && !(github.event_name == 'workflow_dispatch' && inputs.test_mode)
+        if: env.PUBLISH == '1'
         timeout-minutes: 10
         env:
           EDITION_DATE: ${{ steps.issue.outputs.date }}
         run: |
           site=https://le-signal-veille.vercel.app
           local="editions/$EDITION_DATE.html"
+          if ! git show --format= --name-only HEAD | grep -Fxq "$local"; then
+            echo "Aucune nouvelle édition à vérifier."
+            exit 0
+          fi
           for attempt in {1..30}; do
             if curl -fsS --max-time 10 "$site/$local" -o /tmp/signal-edition.html &&
               cmp -s "$local" /tmp/signal-edition.html &&
