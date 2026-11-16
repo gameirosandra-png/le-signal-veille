@@ -67,6 +67,8 @@ def prepare_page(review, root):
         page = page.replace('<section class="grid" id="articles">', '<h2 id="faits">Ce qui s’est passé</h2><section class="grid" id="articles">')
         sections = '<section class="gazette-section"><h2 id="travail">Pourquoi c’est important pour mon travail</h2>' + ''.join('<p>'+esc(p)+'</p>' for p in review["work"].splitlines() if p.strip()) + '</section>'
         sections += '<section class="gazette-section"><h2 id="suite">Ce qu’il faut surveiller ensuite</h2>' + ''.join('<p>'+esc(p)+'</p>' for p in review["watch"].splitlines() if p.strip()) + '</section>'
+        if review.get("vibeAbsent"):
+            sections += '<p>' + esc(review["vibeAbsent"]) + '</p>'
         page = page.replace('</main>', sections + '</main>')
     else:
         page = page.replace('Journal hebdomadaire · IA &amp; No-Code','Édition spéciale · IA &amp; No-Code').replace('Journal hebdomadaire · IA & No-Code','Édition spéciale · IA & No-Code')
