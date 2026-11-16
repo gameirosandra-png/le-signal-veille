@@ -2,7 +2,7 @@ name: LE SIGNAL — publication hebdomadaire
 on:
   push:
     branches: [main]
-    paths: [PROMPT-MAITRE.md]
+    paths: [PROMPT-MAITRE.md, scripts/editorial.py]
   schedule:
     - cron: "0 9 * * 1"
       timezone: "Europe/Paris"

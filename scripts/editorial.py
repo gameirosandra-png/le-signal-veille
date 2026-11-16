@@ -4,6 +4,7 @@ import json
 import os
 import re
 import urllib.request
+from urllib.error import HTTPError
 from urllib.parse import urlsplit
 from zoneinfo import ZoneInfo
 
@@ -87,13 +88,21 @@ def research(instruction):
             "tools": [{"type": "web_search"}], "tool_choice": "required",
             "include": ["web_search_call.action.sources"], "max_tool_calls": 18,
             "max_output_tokens": 12000, "store": False, "input": instruction,
-            "text": {"format": {"type": "json_object"}},
         }).encode(),
         headers={"Authorization": "Bearer " + os.environ["OPENAI_API_KEY"],
                  "Content-Type": "application/json"}, method="POST",
     )
-    with urllib.request.urlopen(request, timeout=480) as response:
-        result = json.load(response)
+    try:
+        with urllib.request.urlopen(request, timeout=480) as response:
+            result = json.load(response)
+    except HTTPError as error:
+        try:
+            detail = json.load(error)["error"]
+            fields = [detail.get("code"), detail.get("type"), detail.get("param")]
+            detail = " / ".join(value for value in fields if isinstance(value, str) and re.fullmatch(r"[\w.\[\]-]{1,100}", value))
+        except (TypeError, ValueError, KeyError):
+            detail = ""
+        raise RuntimeError(f"API OpenAI : HTTP {error.code} ({detail})") from None
     if result.get("status") != "completed":
         raise ValueError("Recherche incomplète.")
     urls = set()
@@ -116,7 +125,9 @@ def research(instruction):
             evidence.add(canonical(url))
         except (TypeError, ValueError):
             continue
-    return json.loads("".join(texts)), evidence
+    raw = "\n".join(texts).strip()
+    fence = re.fullmatch(r"\x60{3}(?:json)?\s*(.*?)\s*\x60{3}", raw, re.DOTALL)
+    return json.loads(fence[1] if fence else raw), evidence
 
 def require_sources(edition, evidence):
     missing = []
