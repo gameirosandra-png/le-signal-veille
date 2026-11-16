@@ -1,0 +1,113 @@
+{
+  "date": "2026-11-16",
+  "title": "Agents de code et automatisations : les preuves avant le passage en production",
+  "articles": [
+    {
+      "id": "vercel-parallel-decisions-gateway-2026-11-13",
+      "titre": "Vercel rend les décisions sourcées de Parallel accessibles via AI Gateway",
+      "categorie": "IA",
+      "angle": "Nouveautés et signaux faibles",
+      "acteur": "Vercel et Parallel",
+      "produit": "Parallel Decisions Fast sur AI Gateway",
+      "evenement": "Ajout de Parallel Decisions Fast au catalogue AI Gateway avec une gratuité temporaire.",
+      "date": "2026-11-13",
+      "dateEvenement": "2026-11-13",
+      "source": "https://vercel.com/changelog/parallel-decisions-now-available-on-ai-gateway-for-free",
+      "sourcesComplementaires": [],
+      "statut": "Annoncé",
+      "inclusion": "Les résultats structurés et accompagnés de références peuvent être transmis à une automatisation, avec la possibilité de présenter les preuves à la personne qui décide.",
+      "resume": "Vercel annonce l’accès à Parallel Decisions Fast dans AI Gateway, sans compte Parallel séparé. Le service recherche sur le web pour répondre à une question binaire, choisir parmi des options ou attribuer une note selon une grille. Les réponses incluent des éléments de preuve. Au 16 novembre, Vercel indiquait une gratuité jusqu’au 23 novembre.",
+      "limites": "L’annonce de Vercel établit l’intégration. Nous n’avons pas de mesure indépendante de la pertinence des sources, de la calibration des probabilités ou du coût par résultat exploitable après la période gratuite.",
+      "impact": "Dans une veille, un résultat structuré peut aider à trier les annonces à relire. Utilisez un scénario Make en mode test avec un lot de liens déjà annotés dans Airtable. Enregistrez la réponse, la référence et le cas où aucune preuve ne suffit. Comparez avec une règle simple qui exige une adresse officielle, une date et une citation. Une probabilité ne doit déclencher ni publication ni rejet d’un dossier. Le critère utile est le nombre de cas correctement orientés, y compris les cas renvoyés à la revue.",
+      "surveiller": "Après le 23 novembre, relever le tarif, la latence et le taux de preuves retrouvables avant d’en faire une dépendance. Tester les conflits de sources et l’abstention."
+    },
+    {
+      "id": "google-gemini-4-carbon-acces-elargi-2026-11-10",
+      "titre": "Gemini 4 Carbon élargit son accès aux développeurs",
+      "categorie": "IA",
+      "angle": "Technique et recherche",
+      "acteur": "Google DeepMind",
+      "produit": "Gemini 4 Carbon et Google Antigravity",
+      "evenement": "Élargissement de l’accès à Gemini 4 Carbon après la phase réservée à des partenaires de cybersécurité.",
+      "date": "2026-11-10",
+      "dateEvenement": "2026-11-10",
+      "source": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-carbon-now-available/",
+      "sourcesComplementaires": [
+        "https://www.androidauthority.com/google-gemini-4-carbon-rollout-3733702/"
+      ],
+      "statut": "Annoncé",
+      "inclusion": "Le fait nouveau est l’accès élargi après la présentation du modèle fin octobre. L’orchestration d’agents dans Antigravity reste en préversion.",
+      "resume": "Google a ouvert Carbon aux développeurs payants et aux entreprises via ses offres API. Le déploiement touche aussi des surfaces destinées aux abonnés Google AI Ultra. Google l’oriente vers les tâches longues, comme le débogage complexe. Les tarifs API introductifs annoncés étaient de 2 dollars par million de jetons entrants et de 10 dollars par million de jetons sortants, vérifiés le 16 novembre.",
+      "limites": "La presse spécialisée corrobore le calendrier et l’élargissement de l’accès. Les performances mises en avant par Google ne prédisent pas le résultat sur un dépôt particulier. Nous n’avons pas reproduit ces mesures.",
+      "impact": "Comparer Carbon à Claude Code sur une même tâche circonscrite de PlayOff, dans deux branches de test à partir du même commit. Donner les mêmes droits, le même temps et les mêmes critères. Relever les tests ajoutés, les défauts introduits, le temps de revue et les jetons utilisés. Pour un problème de concurrence, inclure un cas avec deux écritures simultanées. Garder les identifiants de production hors du périmètre. Le coût d’une tentative réussie se mesure avec les relances et la revue, en plus du prix des jetons.",
+      "surveiller": "Vérifier la disponibilité exacte de la préversion, la traçabilité des actions des sous-agents et la capacité à reproduire les résultats à coût comparable."
+    },
+    {
+      "id": "supabase-expo-eas-environnements-2026-11-10",
+      "titre": "Expo simplifie le raccordement à Supabase et l’isolation de Preview",
+      "categorie": "No-Code",
+      "angle": "No-code et automatisation",
+      "acteur": "Supabase et Expo",
+      "produit": "Intégration Supabase dans EAS CLI",
+      "evenement": "Publication de l’intégration officielle Supabase dans EAS CLI avec projet séparé pour un environnement choisi.",
+      "date": "2026-11-10",
+      "dateEvenement": "2026-11-10",
+      "source": "https://supabase.com/blog/set-up-supabase-for-every-expo-environment-in-one-command",
+      "sourcesComplementaires": [
+        "https://docs.expo.dev/guides/using-supabase/"
+      ],
+      "statut": "Vérifié",
+      "inclusion": "La documentation Expo décrit la procédure et précise que l’isolement de Preview nécessite une action explicite.",
+      "resume": "L’intégration peut créer ou relier un projet Supabase, installer le SDK et renseigner les variables d’environnement Expo. Une commande distincte ciblant Preview peut créer un projet et des identifiants séparés. Expo précise que ce projet compte dans le nombre de projets actifs permis par la formule.",
+      "limites": "Les deux sources sont les partenaires de l’intégration. La procédure est recoupée avec la documentation Expo, sans essai sur PlayOff. L’intégration concerne les applications Expo.",
+      "impact": "Pour un futur client mobile PlayOff sous Expo, vérifier dans chaque build quel projet reçoit les requêtes avant d’ajouter des comptes de test. Une base distincte réduit le risque qu’une mise à jour Preview parle à la production. Il reste à appliquer et tester les migrations et la sécurité au niveau des lignes (RLS). Créer deux utilisateurs de test de rôles différents et vérifier qu’ils ne voient que leurs données. Comparer le projet Preview séparé au développement local si le quota de projets est une contrainte.",
+      "surveiller": "Au prochain build, contrôler l’identifiant réellement embarqué, les droits de la clé publiable ainsi que les limites de la formule. Pour une application web seule, conserver le déploiement existant."
+    },
+    {
+      "id": "cepd-cef-recrutement-2027-annonce-2026-11-11",
+      "titre": "Le CEPD choisit le recrutement automatisé pour son action coordonnée de 2027",
+      "categorie": "Réglementation",
+      "angle": "Politique et réglementation",
+      "acteur": "Comité européen de la protection des données",
+      "produit": "Cadre d’application coordonnée du RGPD",
+      "evenement": "Sélection des décisions automatisées dans la présélection de candidats comme thème de la sixième action coordonnée.",
+      "date": "2026-11-11",
+      "dateEvenement": "2026-11-10",
+      "source": "https://www.edpb.europa.eu/news/edpb-adopts-statement-on-review-of-the-republic-of-korea-adequacy-processor-bcr_en",
+      "sourcesComplementaires": [
+        "https://cnil.fr/fr/actualite-du-cepd-adequation-de-la-coree-du-sud-versions-finales-des-bcr-st-et-action-coordonnee-sur"
+      ],
+      "statut": "Annoncé",
+      "inclusion": "Le thème est confirmé par le CEPD et par la CNIL, qui distingue la date de décision de la date de publication.",
+      "resume": "Le CEPD a retenu le 10 novembre les outils de présélection automatisée de candidats, IA comprise, pour son action coordonnée en 2027. Le communiqué du 11 novembre cible le droit de ne pas être soumis à certaines décisions entièrement automatisées ainsi que le droit d’accès associé.",
+      "limites": "Le lancement est prévu en 2027. Le communiqué annonce un axe de contrôle, sans établir de nouvelle obligation ni préciser le calendrier détaillé.",
+      "impact": "Pour un workflow RH, documenter qui prend effectivement la décision, les informations affichées à cette personne et les traces consultables à la demande du candidat. Tester ce parcours sur des dossiers synthétiques. Si le score exclut automatiquement un candidat, faire examiner le dispositif avant de le mettre en service.",
+      "surveiller": "Suivre la publication du calendrier, les autorités participantes et les questionnaires de contrôle lorsqu’ils seront disponibles."
+    },
+    {
+      "id": "github-copilot-retraits-decembre-annonces-2026-11-13",
+      "titre": "Copilot prévoit le retrait de six modèles le 14 décembre",
+      "categorie": "Vibe Coding",
+      "angle": "Usages professionnels et marché",
+      "acteur": "GitHub",
+      "produit": "GitHub Copilot",
+      "evenement": "Annonce du retrait de six modèles Copilot en décembre, distincte de la vague annoncée pour novembre.",
+      "date": "2026-11-13",
+      "dateEvenement": "2026-11-13",
+      "source": "https://github.blog/changelog/2026-11-13-upcoming-deprecation-of-selected-github-copilot-models-in-december/",
+      "sourcesComplementaires": [],
+      "statut": "Annoncé",
+      "inclusion": "Une migration de fournisseur peut modifier à la fois le coût d’un workflow, son comportement et les droits admin nécessaires pour le faire tourner.",
+      "resume": "GitHub prévoit de retirer le 14 décembre Claude Fable 5, Claude Haiku 4.5, Gemini 3.8 Flash, Gemini 4 Argon, Grok 4.6 et Kimi K3 des expériences Copilot concernées. GitHub prévoit une exception pour Claude Haiku 4.5 sur les abonnements individuels annuels et n’avait pas encore indiqué de successeur à Kimi K3 dans cette annonce.",
+      "limites": "Le changelog GitHub établit le calendrier annoncé. L’accès réel à un remplaçant dépend de la formule et de la politique de l’organisation. Ces échéances concernent Copilot.",
+      "impact": "Pour une équipe produit, recenser les références de modèles épinglées dans les configurations, les tests de revue automatisée et les instructions d’équipe. Tester le remplaçant sur une demande passée dont on connaît les défauts et avec les mêmes droits. Comparer défauts détectés, commentaires injustifiés, consommation de crédits et temps de revue. Les scénarios Claude Code ou les appels directs aux API doivent être suivis dans leur propre inventaire.",
+      "surveiller": "Relever l’alternative officielle de Kimi K3 et faire confirmer les modèles activés par l’administrateur Copilot avant le 14 décembre."
+    }
+  ],
+  "rubriques": {},
+  "work": "Le changement commun de la semaine se joue à trois endroits : le modèle qui propose une action, l’environnement qui l’exécute et le contrôle qui décide si son résultat est exploitable. Pour une Product Builder, gagner du temps sur l’installation d’un backend ou sur le tri d’informations déplace une partie du travail vers les tests, l’identification des droits et le suivi de la consommation.\n\nPour PlayOff, commencer par une réparation connue dans une copie de travail. Préparer une base Supabase de test ou des données locales, un jeu de comptes fictifs et une liste des comportements attendus. Si les deux agents de code produisent des correctifs plausibles, relire en priorité les migrations, les règles d’accès et les tests des cas concurrents. Conserver le diff, le nombre de relances et les résultats de test dans le ticket de travail. Si une version de prévisualisation peut écrire en production, régler ce point avant tout essai avec des utilisateurs.\n\nPour une veille ou une activité d’OBM, partir d’un tableau Airtable avec des cas concrets et étiquetés : annonce datée, annonce recyclée, lien générique et sources qui se contredisent. Make peut appeler un outil de recherche puis déposer les preuves et le motif de la décision dans une file de revue. Comparer les mêmes cas avec une recherche manuelle avant de compter sur l’automatisation. Un lien vide, hors période ou invérifiable doit rester un motif de blocage. Garder le scénario de test en lecture seule sur les données de travail.\n\nLe choix entre une règle et un modèle dépend du contrôle à effectuer. Une règle suffit pour écarter une date future ou retrouver une URL déjà publiée. Une revue sémantique sert à reconnaître une même annonce reformulée. Rendre les deux verdicts visibles permet de diagnostiquer un rejet et de reprendre sans dégrader le registre. Pour une recommandation d’outil, demander une mesure au niveau de la tâche réelle, avec le coût de la revue et des nouvelles tentatives.",
+  "watch": "23 novembre · Vérifier les conditions de facturation de Parallel Decisions Fast et l’export des preuves. Le test utile est de retrouver la page et le passage précis sur un échantillon où certaines sources se contredisent.\n\nAvant le 14 décembre · Vérifier les remplacements Copilot dans le compte réellement utilisé et rejouer un cas de revue existant. L’annonce de retrait figure dans la fiche GitHub de ce numéro.\n\nLors du prochain cycle PlayOff · Vérifier qu’un parcours Preview ne partage aucun identifiant de production. Si le futur client est sous Expo, le guide officiel lié dans la fiche Supabase détaille les variables et le projet par environnement.\n\nEn 2027 · Suivre les annonces du CEPD et de la CNIL sur le démarrage de l’action coordonnée. Le champ annoncé justifie de documenter le rôle du tri automatisé dès maintenant dans les projets de recrutement concernés.",
+  "approved": true,
+  "reviewedAt": "2026-11-16T14:36:33.041121+00:00",
+  "reviewedHash": "14b502f146a5c067669ccdbb27176bf026450684dc014dcca122542ce2636dd0"
+}

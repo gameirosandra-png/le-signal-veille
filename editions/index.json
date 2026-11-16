@@ -2,6 +2,19 @@
   "schemaVersion": 1,
   "editions": [
     {
+      "id": "2026-11-16",
+      "date": "2026-11-16",
+      "title": "LE SIGNAL. — Agents de code et automatisations : les preuves avant le passage en production",
+      "url": "/editions/2026-11-16.html",
+      "status": "validee",
+      "verifiedNews": true,
+      "articleCount": 5,
+      "validatedAt": "2026-11-16T14:36:33.041121+00:00",
+      "editoriallyReviewedAt": "2026-11-16T14:36:33.041121+00:00",
+      "validatedHtmlHash": "9b2963addad3824301d439f09084bf3bf173fcb9a46fcf8c28e4fa44450de760",
+      "validatedContentHash": "824c275d071a27b5cb340f5a96d83332906a9c7345855fb68ee1877a6cc7aa43"
+    },
+    {
       "id": "2026-10-14",
       "date": "2026-10-14",
       "title": "LE SIGNAL. — Plus d’autonomie, toujours des limites.",
