@@ -1,7 +1,5 @@
 name: LE SIGNAL — newsletter après publication validée
 on:
-  schedule:
-    - cron: '*/30 * * * *'
   workflow_dispatch:
 permissions:
   contents: read
