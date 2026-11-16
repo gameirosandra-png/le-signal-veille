@@ -1,8 +1,8 @@
 name: LE SIGNAL — publication hebdomadaire
 on:
   schedule:
-    # Deux heures UTC couvrent 09:00 Europe/Paris été et hiver.
-    - cron: "0 7,8 * * 1"
+    - cron: "0 9 * * 1"
+      timezone: "Europe/Paris"
   workflow_dispatch:
     inputs:
       test_mode:
@@ -25,23 +25,23 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Vérifier l'heure locale
-        id: time
-        env:
-          EVENT_NAME: ${{ github.event_name }}
+      - name: Vérifier la branche de publication
+        if: github.event_name == 'workflow_dispatch' && !inputs.test_mode && github.ref != 'refs/heads/main'
         run: |
-          python - <<'PY'
-          from datetime import datetime
-          from zoneinfo import ZoneInfo
-          import os
-          local = datetime.now(ZoneInfo("Europe/Paris"))
-          valid = os.environ["EVENT_NAME"] == "workflow_dispatch" or (local.weekday() == 0 and local.hour == 9)
-          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
-              f.write(f"publish={'true' if valid else 'false'}\n")
-          print(f"Europe/Paris: {local.isoformat()} | publish={valid}")
-          PY
+          echo "::error::La publication doit partir de main."
+          exit 1
+      - name: Déterminer le numéro du jour
+        id: issue
+        env:
+          TZ: Europe/Paris
+        run: |
+          edition=$(date +%F)
+          echo "date=$edition" >> "$GITHUB_OUTPUT"
+          if test -f "reviews/$edition.json"; then
+            echo "reviewed=true" >> "$GITHUB_OUTPUT"
+          fi
       - name: Vérifier la clé API
-        if: steps.time.outputs.publish == 'true'
+        if: steps.issue.outputs.reviewed != 'true'
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
@@ -49,21 +49,46 @@ jobs:
             echo "::error::Ajouter OPENAI_API_KEY dans Settings > Secrets and variables > Actions."
             exit 1
           fi
-      - name: Générer et archiver l'édition
-        if: steps.time.outputs.publish == 'true'
+      - name: Générer un brouillon pour revue
+        if: steps.issue.outputs.reviewed != 'true'
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          SIGNAL_TEST_MODE: ${{ github.event_name == 'workflow_dispatch' && inputs.test_mode && '1' || '0' }}
+          SIGNAL_TEST_MODE: '1'
         run: python scripts/publish.py
-      - name: Conserver l'édition de test comme artifact
-        if: github.event_name == 'workflow_dispatch' && inputs.test_mode
+      - name: Conserver le brouillon
+        if: steps.issue.outputs.reviewed != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: le-signal-test-preview
           path: test-preview.html
-          if-no-files-found: warn
+          if-no-files-found: error
+      - name: Préparer l’édition validée
+        if: steps.issue.outputs.reviewed == 'true'
+        env:
+          EDITION_DATE: ${{ steps.issue.outputs.date }}
+          TEST_MODE: ${{ github.event_name == 'workflow_dispatch' && inputs.test_mode }}
+        run: |
+          if [ "$TEST_MODE" = true ]; then
+            python scripts/publish_reviewed.py "reviews/$EDITION_DATE.json" --preview test-preview.html
+          else
+            python scripts/publish_reviewed.py "reviews/$EDITION_DATE.json"
+          fi
+      - name: Conserver l’aperçu validé
+        if: steps.issue.outputs.reviewed == 'true' && github.event_name == 'workflow_dispatch' && inputs.test_mode
+        uses: actions/upload-artifact@v4
+        with:
+          name: le-signal-validated-preview
+          path: test-preview.html
+          if-no-files-found: error
+      - name: Bloquer la publication en l’absence de revue
+        if: steps.issue.outputs.reviewed != 'true' && !(github.event_name == 'workflow_dispatch' && inputs.test_mode)
+        run: |
+          echo "::error::Le brouillon ne dispose pas d’une validation éditoriale."
+          exit 1
       - name: Commit et publication
-        if: steps.time.outputs.publish == 'true' && !(github.event_name == 'workflow_dispatch' && inputs.test_mode)
+        if: steps.issue.outputs.reviewed == 'true' && !(github.event_name == 'workflow_dispatch' && inputs.test_mode)
+        env:
+          EDITION_DATE: ${{ steps.issue.outputs.date }}
         run: |
           if git diff --quiet && [ -z "$(git ls-files --others --exclude-standard)" ]; then
             echo "Aucune nouvelle édition à publier."
@@ -71,6 +96,28 @@ jobs:
           fi
           git config user.name "le-signal-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html editions data/sujets.json
+          git add index.html "editions/$EDITION_DATE.html" editions/index.json data/sujets.json data/rubriques.json
           git commit -m "LE SIGNAL : édition hebdomadaire automatisée"
           git push
+      - name: Vérifier le numéro sur le site public
+        if: steps.issue.outputs.reviewed == 'true' && !(github.event_name == 'workflow_dispatch' && inputs.test_mode)
+        timeout-minutes: 10
+        env:
+          EDITION_DATE: ${{ steps.issue.outputs.date }}
+        run: |
+          site=https://le-signal-veille.vercel.app
+          local="editions/$EDITION_DATE.html"
+          for attempt in {1..30}; do
+            if curl -fsS --max-time 10 "$site/$local" -o /tmp/signal-edition.html &&
+              cmp -s "$local" /tmp/signal-edition.html &&
+              curl -fsS --max-time 10 "$site/" -o /tmp/signal-home.html &&
+              cmp -s index.html /tmp/signal-home.html &&
+              curl -fsS --max-time 10 "$site/editions/index.json" -o /tmp/signal-index.json &&
+              cmp -s editions/index.json /tmp/signal-index.json; then
+              echo "Édition, accueil et catalogue vérifiés sur $site."
+              exit 0
+            fi
+            sleep 15
+          done
+          echo "::error::Le numéro préparé n’est pas encore vérifiable sur le site public."
+          exit 1
