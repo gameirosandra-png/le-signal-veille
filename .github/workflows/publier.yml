@@ -81,9 +81,20 @@ jobs:
             test-preview.html
             editorial-report.json
           if-no-files-found: warn
+      - uses: actions/setup-node@v4
+        if: env.PUBLISH == '1'
+        with:
+          node-version: '22'
+      - uses: pnpm/action-setup@v4
+        if: env.PUBLISH == '1'
+        with:
+          version: '10'
       - name: Tester les fonctions critiques
         if: env.PUBLISH == '1'
-        run: python -m unittest discover -s tests
+        run: |
+          pnpm install --frozen-lockfile
+          node --test tests/*.test.js
+          python -m unittest discover -s tests
       - name: Commit et publication
         if: env.PUBLISH == '1'
         env:

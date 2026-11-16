@@ -88,6 +88,8 @@ def publish_review(review, root=ROOT, now=None):
     articles = [{**a,'edition':review['date']} for a in review['articles']]
     content = json.dumps([title, [[a['id'],a['titre'],a['resume'],a['source']] for a in articles]],ensure_ascii=False,separators=(',',':'))
     edition = {'id':review['date'],'date':review['date'],'title':title,'url':'/editions/'+review['date']+'.html','status':'validee','verifiedNews':True,'articleCount':len(articles),'validatedAt':now.isoformat(),'editoriallyReviewedAt':review['reviewedAt'],'validatedHtmlHash':hashlib.sha256(page.encode()).hexdigest(),'validatedContentHash':hashlib.sha256(content.encode()).hexdigest()}
+    if 'work' in review:
+        edition['editorialSchema'] = 2
     catalog['editions'].insert(0,edition)
     registry['items'] += articles
     # Git publishes these generated files together in one commit.
