@@ -85,10 +85,10 @@ def research(instruction):
     model = os.environ.get("OPENAI_MODEL", "gpt-5.4-mini")
     request = urllib.request.Request(
         publish.API, data=json.dumps({
-            "model": model, "reasoning": {"effort": "medium"},
+            "model": model, "reasoning": {"effort": "low"},
             "tools": [{"type": "web_search"}], "tool_choice": "auto",
             "include": ["web_search_call.action.sources"], "max_tool_calls": 18,
-            "max_output_tokens": 12000, "store": False, "input": instruction,
+            "max_output_tokens": 18000, "store": False, "input": instruction,
         }).encode(),
         headers={"Authorization": "Bearer " + os.environ["OPENAI_API_KEY"],
                  "Content-Type": "application/json"}, method="POST",
@@ -105,7 +105,8 @@ def research(instruction):
             detail = ""
         raise RuntimeError(f"API OpenAI : HTTP {error.code} ({detail})") from None
     if result.get("status") != "completed":
-        raise ValueError("Recherche incomplète.")
+        reason = (result.get("incomplete_details") or {}).get("reason", result.get("status"))
+        raise ValueError(f"Recherche incomplète : {reason}.")
     urls = set()
     texts = []
     for item in result["output"]:
@@ -193,6 +194,9 @@ def main():
     if os.environ.get("SIGNAL_TEST_MODE") != "1" and any(edition["id"] == str(date) for edition in catalog):
         print(f"Le numéro du {date} est déjà archivé.")
         return
+    if os.environ.get("SIGNAL_TEST_MODE") == "1":
+        catalog = [entry for entry in catalog if entry["id"] != str(date)]
+        history = [item for item in history if item["edition"] != str(date)]
     archives = {entry["id"]: publish.archive_articles(ROOT / entry["url"].lstrip("/")) for entry in catalog}
     archives["dossiers-pilote"] = json.loads((ROOT / "data/pilote.json").read_text(encoding="utf-8"))["items"]
     draft, verdict = collect(date, history, archives)

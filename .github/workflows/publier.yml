@@ -39,10 +39,11 @@ jobs:
         id: issue
         env:
           TZ: Europe/Paris
+          EVENT_NAME: ${{ github.event_name }}
         run: |
           edition=$(date +%F)
           echo "date=$edition" >> "$GITHUB_OUTPUT"
-          if test -f "reviews/$edition.json"; then
+          if [ "$EVENT_NAME" != push ] && test -f "reviews/$edition.json"; then
             echo "reviewed=true" >> "$GITHUB_OUTPUT"
           fi
       - name: Vérifier la clé API
@@ -127,8 +128,10 @@ jobs:
               curl -fsS --max-time 10 "$site/" -o /tmp/signal-home.html &&
               cmp -s index.html /tmp/signal-home.html &&
               curl -fsS --max-time 10 "$site/editions/index.json" -o /tmp/signal-index.json &&
-              cmp -s editions/index.json /tmp/signal-index.json; then
-              echo "Édition, accueil et catalogue vérifiés sur $site."
+              cmp -s editions/index.json /tmp/signal-index.json &&
+              curl -fsS --max-time 10 "$site/data/sujets.json" -o /tmp/signal-registry.json &&
+              cmp -s data/sujets.json /tmp/signal-registry.json; then
+              echo "Édition, accueil, catalogue et registre vérifiés sur $site."
               exit 0
             fi
             sleep 15
